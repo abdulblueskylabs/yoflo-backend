@@ -12,7 +12,6 @@
   class AuthController extends Controller
   {
 
-
     //Register user for Api user
     public function register(Request $request)
     {
@@ -69,6 +68,5 @@
       return response(['message' => 'logged out Successfully']);
 
     }
-
 
   }
