@@ -43,4 +43,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function subscriptions()
+    {
+      return $this->belongsToMany(Subscription::class,'subscription_user', 'user_id', 'subscription_id');
+    }
+    //php artisan make:migration create_subscription_user_table --create=subscription_user
 }

@@ -13,17 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('subscriptions', function (Blueprint $table) {
+        Schema::create('subscription_user', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->integer('user_id');
+            $table->integer('subscription_id');
+            $table->date('start');
+            $table->date('end');
+            $table->boolean('is_active');
             $table->dateTime('lote_deleted');
             $table->integer('lote_deleted_by');
             $table->integer('lote_author_id');
             $table->integer('lote_access');
-            $table->integer('max_node_quantity');
-            $table->integer('max_main_sphere_quantity');
-            $table->string('max_storage_quantity');
-            $table->decimal('cost');
             $table->timestamps();
         });
     }
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subscriptions');
+        Schema::dropIfExists('subscription_user');
     }
 };
