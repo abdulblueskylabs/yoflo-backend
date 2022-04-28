@@ -13,16 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('phone')->unique();
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->boolean('is_admin');
-            $table->boolean('is_active');
-            $table->rememberToken();
+            $table->date('lote_deleted');
+            $table->integer('lote_deleted_by');
+            $table->integer('lote_author_id');
+            $table->integer('lote_access');
+            $table->integer('max_node_quantity');
+            $table->integer('max_main_sphere_quantity');
+            $table->string('max_storage_quantity');
+            $table->decimal('cost');
             $table->timestamps();
         });
     }
@@ -34,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('subscriptions');
     }
 };
