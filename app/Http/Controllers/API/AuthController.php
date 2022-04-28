@@ -22,6 +22,7 @@
           'phone' => 'required|unique:users',
           'email' => 'required|email|max:191|unique:users,email',
           'password' => 'required|string|min:7',
+          'is_admin' => 'required',
           'password_confirmation' => 'required| same:password'
         ]);
 
@@ -30,8 +31,11 @@
           'name' => $data['name'],
           'email' => $data['email'],
           'phone' => $data['phone'],
+          'is_admin' => $data['is_admin'],
+          'is_active' => 0,
           'password' => Hash::make($data['password']),
         ]);
+
         $token = $user->createToken($data['email'])->plainTextToken;
         $response = [
           'user' => $user,
@@ -100,8 +104,7 @@
           'email' => 'required|email|max:191',
         ]);
       $user = Auth::user();
-      if(User::where('email', $data['email'])->first())
-      {
+      if (User::where('email', $data['email'])->first()) {
 
       }
     }
