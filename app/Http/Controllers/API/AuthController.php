@@ -8,6 +8,7 @@
   use Illuminate\Http\Request;
   use Illuminate\Support\Facades\Auth;
   use Illuminate\Support\Facades\Hash;
+  use Illuminate\Support\Facades\Validator;
   use Laravel\Sanctum\PersonalAccessToken;
 
   class AuthController extends Controller
@@ -16,7 +17,11 @@
     //Register user for Api user
     public function register(Request $request)
     {
-      $data = $request->validate(
+      $success = false;
+      $error = '';
+      $payload = null;
+
+      $validator = Validator::make($request->all(),
         [
           'name' => 'required',
           'phone' => 'required|unique:users',
@@ -25,49 +30,81 @@
           'is_admin' => 'required',
           'password_confirmation' => 'required| same:password'
         ]);
+      if ($validator->fails()) {
+
+        $error = $validator->errors()->all();
+        return [
+          'success' => $success,
+          'error' => $error
+        ];
+      }
 
       if (!str_contains($request->password, $request->name)) {
         $user = User::create([
-          'name' => $data['name'],
-          'email' => $data['email'],
-          'phone' => $data['phone'],
-          'is_admin' => $data['is_admin'],
+          'name' => $request['name'],
+          'email' => $request['email'],
+          'phone' => $request['phone'],
+          'is_admin' => $request['is_admin'],
           'is_active' => 0,
-          'password' => Hash::make($data['password']),
+          'password' => Hash::make($request['password']),
         ]);
 
-        $token = $user->createToken($data['email'])->plainTextToken;
+        $token = $user->createToken($request['email'])->plainTextToken;
+        $payload = ['token' => $token];
+        $success = true;
         $response = [
-          'user' => $user,
-          'token' => $token
+          'success' => $success,
+          'payload' => $payload
         ];
         return response($response, 201);
 
       }
-      return response(['message' => ' Does not match your name'], 401);
+      $error = ['message' => 'Does not match your name'];
+      return response([
+        'success' => $success,
+        'error' => $error,
+      ], 401);
     }
 
     // Login function for Api user
     public function login(Request $request)
     {
+      $success = false;
+      $error = '';
+      $payload = null;
 
-      $data = $request->validate(
-        [
-          'email' => 'required|email|max:191',
-          'password' => 'required|string',
-        ]);
-      $user = User::where('email', $data['email'])->first();
+      $validator = Validator::make($request->all(), [
+        'email' => 'required|email|max:191',
+        'password' => 'required|string',
+      ]);
 
-      if (!$user || !Hash::check($data['password'], $user->password)) {
-        return response(['message' => 'Invalid Credentials'], 401);
-      } else {
-        $token = $user->createToken($data['email'])->plainTextToken;
-        $response = [
-          'user' => $user,
-          'token' => $token
+      if ($validator->fails()) {
+        $error = $validator->errors()->all();
+        return [
+          'success' => $success,
+          'error' => $error
         ];
-        return response($response, 201);
       }
+
+      $user = User::where('email', $request['email'])->first();
+
+      if (!$user || !Hash::check($request['password'], $user->password)) {
+        $error = ['message' => 'Invalid Credentials'];
+        $response = [
+          'success' => $success,
+          'error' => $error
+        ];
+
+      } else {
+        $token = $user->createToken($request['email'])->plainTextToken;
+        $payload = ['token' => $token];
+        $success = true;
+        $response = [
+          'success' => $success,
+          'payload' => $payload
+        ];
+      }
+      return response($response, 201);
 
     }
 
@@ -75,38 +112,62 @@
     public function logout()
     {
       auth()->user()->currentAccessToken()->delete();
-      return response(['message' => 'logged out Successfully']);
+      return response(['success' => true, 'payload' => ['message' => 'logged out Successfully']]);
     }
 
     // Change password function for api user
     public function changePassword(Request $request)
     {
-      $data = $request->validate(
+      $success = false;
+      $error = '';
+      $payload = null;
+
+      $validator = Validator::make($request->all(),
         [
           'password' => 'required|string|min:7',
           'password_confirmation' => 'required| same:password'
         ]);
 
+      if ($validator->fails()) {
+        $error = $validator->errors()->all();
+        return [
+          'success' => $success,
+          'error' => $error
+        ];
+      }
+
       $user = Auth::user();
       if (!str_contains($request->password, $user->name)) {
-        $user->password = Hash::make($data['password']);
+        $user->password = Hash::make($request['password']);
         $user->save();
-        return response(['message' => 'Update Successfully'], 201);
+        $success = true;
+        $payload = ['message' => 'Update Successfully'];
+        $response = [
+          'success' => $success,
+          'payload' => $payload
+        ];
+        return response($response, 201);
       }
-      return response(['message' => ' Does not match your name'], 401);
+      $error = ['message' => 'Does not match your name'];
+      return response([
+        'success' => $success,
+        'error' => $error
+      ], 401);
     }
 
     // send email with instruction
     public function forgotPassword(Request $request)
     {
+      $messages = [
+        'success'=>false,
+        'error' =>['errors'] ,
+      ];
       $data = $request->validate(
         [
-          'email' => 'required|email|max:191',
-        ]);
+          'email' => 'required|email|exists:users,email',
+        ],$messages);
       $user = Auth::user();
-      if (User::where('email', $data['email'])->first()) {
 
-      }
     }
 
   }
