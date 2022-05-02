@@ -1,40 +1,30 @@
 <?php
 
-  namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth;
 
-  use App\Http\Controllers\Controller;
-  use Illuminate\Http\Request;
-  use Illuminate\Support\Facades\Auth;
-  use Illuminate\Support\Facades\Hash;
-  use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Controller;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Foundation\Auth\ResetsPasswords;
 
-  class ResetPasswordController extends Controller
-  {
-    //
-    // Change password function for api user
-    public function changePassword(Request $request)
-    {
+class ResetPasswordController extends Controller
+{
+    /*
+    |--------------------------------------------------------------------------
+    | Password Reset Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller is responsible for handling password reset requests
+    | and uses a simple trait to include this behavior. You're free to
+    | explore this trait and override any methods you wish to tweak.
+    |
+    */
 
-      $validator = Validator::make($request->all(),
-        [
-          'password' => 'required|string|min:7',
-          'password_confirmation' => 'required| same:password'
-        ]);
+    use ResetsPasswords;
 
-      if ($validator->fails()) {
-        $error = $validator->errors();
-        return $this->sendError($error);
-      }
-
-      $user = Auth::user();
-      if (!str_contains($request->password, $user->name)) {
-        $user->password = Hash::make($request['password']);
-        $user->save();
-        $payload = ['message' => 'Update Successfully'];
-       return $this->sendResponse($payload);
-      }
-      $error = ['message' => 'Does not match your name'];
-      return $this->sendError($error);
-    }
-
-  }
+    /**
+     * Where to redirect users after resetting their password.
+     *
+     * @var string
+     */
+    protected $redirectTo = RouteServiceProvider::HOME;
+}
