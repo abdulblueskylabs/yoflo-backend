@@ -14,15 +14,9 @@
   class LoginController extends Controller
   {
 
-
-
     // Login function for Api user
     public function login(Request $request)
     {
-      $success = false;
-      $error = '';
-      $payload = null;
-
       $validator = Validator::make($request->all(), [
         'email' => 'required|email|max:191',
         'password' => 'required|string',
@@ -30,22 +24,20 @@
 
       if ($validator->fails()) {
         $error = $validator->errors();
-        return $this->ApiResponse($success,$payload,$error);
+        return $this->sendError($error);
       }
 
       $user = User::where('email', $request['email'])->first();
 
       if (!$user || !Hash::check($request['password'], $user->password)) {
         $error = ['message' => 'Invalid Credentials'];
-        $response =  $this->ApiResponse($success,$payload,$error);
+        return $this->sendError($error);
 
       } else {
         $token = $user->createToken($request['email'])->plainTextToken;
         $payload = ['token' => $token];
-        $success = true;
-        $response =  $this->ApiResponse($success,$payload,$error);
+        return $this->sendResponse($payload);
       }
-      return response($response, 201);
 
     }
 
@@ -54,8 +46,8 @@
     {
       // Revoke the token that was used to authenticate the current request
       $request->user()->currentAccessToken()->delete();
-      return response( $this->ApiResponse(true, ['message' => 'logged out Successfully'],null));
+      $payload = ['token' => 'logged out Successfully'];
+      return $this->sendResponse($payload);
     }
-
 
   }

@@ -11,11 +11,33 @@
   {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    protected function ApiResponse($success, $payload, $error)
+    /**
+     * success response method.
+     * @return \Illuminate\Http\Response
+     */
+    public function sendResponse($payload, )
     {
-      if (!$success == true) {
-        return ['success' => false, 'payload' => null, 'error' => $error];
-      }
-      return ['success' => true, 'payload' => $payload, 'error' => null];
+      $response = [
+        'success' => true,
+        'payload' => $payload,
+
+      ];
+
+      return response()->json($response, 200);
     }
+
+    /**
+     * return error response.
+     * @return \Illuminate\Http\Response
+     */
+    public function sendError($error, $code = 404)
+    {
+      $response = [
+        'success' => false,
+        'error' => $error,
+      ];
+
+      return response()->json($response, $code);
+    }
+
   }

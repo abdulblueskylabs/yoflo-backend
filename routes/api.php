@@ -24,6 +24,7 @@
   Route::post('sign-up', [RegistrationController::class, 'register']);
   Route::post('login', [LoginController::class, 'login']);
   Route::post('request-password', [forgotPasswordController::class, 'forgotPassword']);
+  Route::post('reset-email-password', [forgotPasswordController::class, 'resetPassword']);
 
 
   Route::middleware('auth:sanctum')->group(function () {
