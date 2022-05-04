@@ -23,7 +23,8 @@
           'phone' => 'required|unique:users',
           'email' => 'required|email|max:191|unique:users,email',
           'password' => 'required|string|min:7',
-          'password_confirmation' => 'required| same:password'
+          'password_confirmation' => 'required| same:password',
+          'subscription_id' => 'required',
         ]);
       if ($validator->fails()) {
 

@@ -13,7 +13,7 @@ class SubscriptionController extends Controller
   public function index()
   {
 
-    $data=Subscription::where('is_active',1)->all();
+    $data=Subscription::where('is_active',1)->get();
     if(!$data)
       return $this->sendError('No data',404);
     else

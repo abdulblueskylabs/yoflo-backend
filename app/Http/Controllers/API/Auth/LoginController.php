@@ -46,7 +46,7 @@
     {
       // Revoke the token that was used to authenticate the current request
       $request->user()->currentAccessToken()->delete();
-      $payload = ['token' => 'logged out Successfully'];
+      $payload = ['message' => 'logout Successful'];
       return $this->sendResponse($payload);
     }
 

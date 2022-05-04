@@ -27,15 +27,30 @@
       }
 
       $user = Auth::user();
-      $name = $user->first_name . $user->last_name;
-      if (!str_contains($request->password, $name)) {
-        $user->password = Hash::make($request['password']);
-        $user->save();
-        $payload = ['message' => 'Update Successfully'];
-        return $this->sendResponse($payload);
+      $name = $user->first_name . ' ' . $user->last_name;
+      $password = $request->password;
+      if (str_contains(strtolower($password), strtolower($name)) || $this->passContainsName($name, $password)) {
+        $error = ['message' => 'Password must not contain name'];
+        return $this->sendError($error);
       }
-      $error = ['message' => 'Does not match your name'];
-      return $this->sendError($error);
+
+      $user->password = Hash::make($request['password']);
+      $user->save();
+      $payload = ['message' => 'Update Successful'];
+
+      return $this->sendResponse($payload);
+
+    }
+
+    // Helper function to validate password contains name
+    function passContainsName($name, $password)
+    {
+      foreach (explode(" ", $name) as $toCheck) {
+        if (str_contains(strtolower($password), strtolower($toCheck))) {
+          return true;
+        }
+      }
+      return false;
     }
 
   }
