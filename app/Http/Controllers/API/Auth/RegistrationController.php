@@ -1,12 +1,13 @@
 <?php
 
-  namespace App\Http\Controllers\Auth;
+  namespace App\Http\Controllers\API\Auth;
 
   use App\Http\Controllers\Controller;
   use App\Models\User;
   use Illuminate\Http\Request;
   use Illuminate\Support\Facades\Hash;
   use Illuminate\Support\Facades\Validator;
+  use Spatie\Permission\Models\Role;
 
   class RegistrationController extends Controller
   {
@@ -17,29 +18,30 @@
 
       $validator = Validator::make($request->all(),
         [
-          'name' => 'required',
+          'first_name' => 'required|string',
+          'last_name' => 'required|string',
           'phone' => 'required|unique:users',
           'email' => 'required|email|max:191|unique:users,email',
           'password' => 'required|string|min:7',
-          'is_admin' => 'required',
           'password_confirmation' => 'required| same:password'
         ]);
       if ($validator->fails()) {
 
         $error = $validator->errors();
-        return $this->sendResponse($error);
+        return $this->sendError($error);
       }
 
-      if (!str_contains($request->password, $request->name)) {
+      $name=$request->first_name.$request->last_name;
+      if (!str_contains($request->password, $name)) {
         $user = User::create([
-          'name' => $request['name'],
+          'first_name' => $request['first_name'],
+          'last_name' => $request['last_name'],
           'email' => $request['email'],
           'phone' => $request['phone'],
-          'is_admin' => $request['is_admin'],
           'is_active' => 0,
           'password' => Hash::make($request['password']),
         ]);
-
+        $user->assignRole('user');
         $token = $user->createToken($request['email'])->plainTextToken;
         $payload = ['token' => $token];
         return $this->sendResponse($payload);

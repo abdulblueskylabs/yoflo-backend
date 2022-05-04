@@ -6,6 +6,7 @@
   use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
   use Illuminate\Validation\ValidationException;
   use Throwable;
+  use Spatie\Permission\Exceptions\UnauthorizedException;
 
   class Handler extends ExceptionHandler
   {
@@ -63,6 +64,7 @@
 
     public function render($request, Throwable $e)
     {
+      // Input Validation Exception
       if ($e instanceof ValidationException) {
         //custom response
         $response = [
@@ -70,6 +72,14 @@
           'error' => $e->errors()
         ];
         return response()->json($response, 422);
+      }
+
+      if ($e instanceof UnauthorizedException) {
+        $response = [
+          'success' => false,
+          'error' =>[ 'message'=>$e->getMessage()]
+        ];
+        return response()->json($response,403);
       }
 
       return parent::render($request, $e);

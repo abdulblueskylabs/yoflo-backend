@@ -17,6 +17,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+//Auth::routes();
+
+  Route::group(['middleware' => ['auth', 'role:admin']], function() {
+    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+      ->name('logout');
+  });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

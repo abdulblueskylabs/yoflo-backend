@@ -1,10 +1,10 @@
 <?php
 
   use Illuminate\Support\Facades\Route;
-  use App\Http\Controllers\Auth\LoginController;
-  use App\Http\Controllers\Auth\RegistrationController;
-  use App\Http\Controllers\Auth\ResetPasswordController;
-  use App\Http\Controllers\Auth\forgotPasswordController;
+  use App\Http\Controllers\API\Auth\LoginController;
+  use App\Http\Controllers\API\Auth\RegistrationController;
+  use App\Http\Controllers\API\Auth\ResetPasswordController;
+  use App\Http\Controllers\API\Auth\forgotPasswordController;
 
   /*
   |--------------------------------------------------------------------------
@@ -27,9 +27,7 @@
   Route::post('reset-email-password', [forgotPasswordController::class, 'resetPassword']);
 
 
-  Route::middleware('auth:sanctum')->group(function () {
+  Route::group(['middleware' => ['auth:sanctum', 'role:user']], function() {
     Route::post('logout', [LoginController::class, 'logout']);
     Route::post('change-password', [ResetPasswordController::class, 'changePassword']);
-
   });
-

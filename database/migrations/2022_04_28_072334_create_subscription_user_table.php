@@ -20,10 +20,6 @@ return new class extends Migration
             $table->date('start');
             $table->date('end');
             $table->boolean('is_active');
-            $table->dateTime('lote_deleted');
-            $table->integer('lote_deleted_by');
-            $table->integer('lote_author_id');
-            $table->integer('lote_access');
             $table->timestamps();
         });
     }

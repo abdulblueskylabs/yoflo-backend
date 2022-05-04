@@ -16,14 +16,11 @@ return new class extends Migration
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->dateTime('lote_deleted');
-            $table->integer('lote_deleted_by');
-            $table->integer('lote_author_id');
-            $table->integer('lote_access');
             $table->integer('max_node_quantity');
-            $table->integer('max_main_sphere_quantity');
+            $table->integer('max_share_quantity');
             $table->string('max_storage_quantity');
             $table->decimal('cost');
+            $table->tinyInteger('is_active');
             $table->timestamps();
         });
     }

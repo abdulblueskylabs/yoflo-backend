@@ -1,6 +1,6 @@
 <?php
 
-  namespace App\Http\Controllers\Auth;
+  namespace App\Http\Controllers\API\Auth;
 
   use App\Http\Controllers\Controller;
   use Illuminate\Http\Request;
@@ -27,11 +27,12 @@
       }
 
       $user = Auth::user();
-      if (!str_contains($request->password, $user->name)) {
+      $name = $user->first_name . $user->last_name;
+      if (!str_contains($request->password, $name)) {
         $user->password = Hash::make($request['password']);
         $user->save();
         $payload = ['message' => 'Update Successfully'];
-       return $this->sendResponse($payload);
+        return $this->sendResponse($payload);
       }
       $error = ['message' => 'Does not match your name'];
       return $this->sendError($error);
