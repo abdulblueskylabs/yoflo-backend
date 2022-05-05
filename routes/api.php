@@ -37,6 +37,6 @@
 
     //User routes
     Route::post('user-subscription', [UserSubscriptionController::class, 'index']);
-    Route::post('user-subscription', [UserSubscriptionController::class, 'update']);
+    Route::put('user-subscription/{id}', [UserSubscriptionController::class, 'update']);
 
   });

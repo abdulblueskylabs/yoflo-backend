@@ -3,10 +3,12 @@
   namespace App\Exceptions;
 
   use Illuminate\Auth\AuthenticationException;
+  use Illuminate\Database\QueryException;
   use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
   use Illuminate\Validation\ValidationException;
   use Throwable;
   use Spatie\Permission\Exceptions\UnauthorizedException;
+  use Illuminate\Database\Eloquent\ModelNotFoundException;
 
   class Handler extends ExceptionHandler
   {
@@ -62,6 +64,7 @@
         : redirect()->guest($exception->redirectTo() ?? route('login'));
     }
 
+    // validation exception
     public function render($request, Throwable $e)
     {
       // Input Validation Exception
@@ -77,11 +80,19 @@
       if ($e instanceof UnauthorizedException) {
         $response = [
           'success' => false,
-          'error' =>[ 'message'=>$e->getMessage()]
+          'error' => ['message' => $e->getMessage()]
         ];
-        return response()->json($response,403);
+        return response()->json($response, 403);
       }
 
+      if ($e instanceof QueryException || $e instanceof ModelNotFoundException) {
+        $response = [
+          'success' => false,
+          'error' => ['message' => $e->getMessage()]
+        ];
+        return response()->json($response, 403);
+      }
       return parent::render($request, $e);
     }
+
   }
