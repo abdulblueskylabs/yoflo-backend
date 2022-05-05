@@ -3,11 +3,13 @@
   namespace App\Http\Controllers\API\Auth;
 
   use App\Http\Controllers\Controller;
+  use App\Models\Subscription;
   use App\Models\User;
   use Illuminate\Http\Request;
   use Illuminate\Support\Facades\Hash;
   use Illuminate\Support\Facades\Validator;
   use Spatie\Permission\Models\Role;
+  use Illuminate\Support\Facades\DB;
 
   class RegistrationController extends Controller
   {
@@ -34,6 +36,7 @@
 
       $name=$request->first_name.$request->last_name;
       if (!str_contains($request->password, $name)) {
+        DB::beginTransaction();
         $user = User::create([
           'first_name' => $request['first_name'],
           'last_name' => $request['last_name'],
@@ -42,8 +45,11 @@
           'is_active' => 0,
           'password' => Hash::make($request['password']),
         ]);
+        $subscription=Subscription::findOrFail($request->subscription_id);
+        $user->subscriptions()->attach($subscription,['start'=>now(),'is_active'=>1]);
         $user->assignRole('user');
         $token = $user->createToken($request['email'])->plainTextToken;
+        DB::commit();
         $payload = ['token' => $token];
         return $this->sendResponse($payload);
 

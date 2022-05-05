@@ -20,4 +20,9 @@ class Subscription extends Model
     'cost',
     'is_active'
   ];
+
+  public function users()
+  {
+    return $this->belongsToMany(User::class, 'subscription_user', 'subscription_id', 'USER_ID')->withPivot('start','end','is_active')->withTimestamps();
+  }
 }

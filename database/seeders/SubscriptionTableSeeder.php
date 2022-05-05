@@ -19,7 +19,7 @@
         'name' => 'Basic',
         'max_node_quantity' => 20,
         'max_share_quantity' => 0,
-        'max_storage_quantity' => 140000000,
+        'max_storage_quantity' => 1.5,
         'cost' => 0.0,
         'is_active' => 1,
       ]);
@@ -27,7 +27,7 @@
         'name' => 'Silver',
         'max_node_quantity' => 400,
         'max_share_quantity' => 20,
-        'max_storage_quantity' => 80000000,
+        'max_storage_quantity' => 40,
         'cost' => 10.0,
         'is_active' => 1,
       ]);
@@ -36,7 +36,7 @@
         'name' => 'Gold',
         'max_node_quantity' => 800,
         'max_share_quantity' => 30,
-        'max_storage_quantity' => 40000000,
+        'max_storage_quantity' => 80,
         'cost' => 20.0,
         'is_active' => 1,
       ]);
@@ -44,7 +44,7 @@
         'name' => 'Platinum',
         'max_node_quantity' => 0,
         'max_share_quantity' => 40,
-        'max_storage_quantity' => 1200000,
+        'max_storage_quantity' => 140 ,
         'cost' => 30.0,
         'is_active' => 1,
       ]);

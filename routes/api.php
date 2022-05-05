@@ -6,6 +6,7 @@
   use App\Http\Controllers\API\Auth\ResetPasswordController;
   use App\Http\Controllers\API\Auth\forgotPasswordController;
   use App\Http\Controllers\API\Subscription\SubscriptionController;
+  use \App\Http\Controllers\API\UserSubscription\UserSubscriptionController;
 
   /*
   |--------------------------------------------------------------------------
@@ -26,10 +27,16 @@
   Route::post('login', [LoginController::class, 'login']);
   Route::post('request-password', [forgotPasswordController::class, 'forgotPassword']);
   Route::post('reset-email-password', [forgotPasswordController::class, 'resetPassword']);
-  Route::get('subscriptions', [SubscriptionController::class,'index']);
+  Route::get('subscription', [SubscriptionController::class,'index']);
 
 
   Route::group(['middleware' => ['auth:sanctum', 'role:user']], function() {
+    // Auth routes
     Route::post('logout', [LoginController::class, 'logout']);
     Route::post('change-password', [ResetPasswordController::class, 'changePassword']);
+
+    //User routes
+    Route::post('user-subscription', [UserSubscriptionController::class, 'index']);
+    Route::post('user-subscription', [UserSubscriptionController::class, 'update']);
+
   });
