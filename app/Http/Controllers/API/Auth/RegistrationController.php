@@ -29,26 +29,41 @@
         ]);
 
       $name = $request->first_name . $request->last_name;
-      if (!str_contains($request->password, $name)) {
+      if (!str_contains(strtolower($request->password), strtolower($name)) || !$this->passContainsName($name, $request->password)) {
+
         DB::beginTransaction();
         $user = User::create([
           'first_name' => $request['first_name'],
           'last_name' => $request['last_name'],
           'email' => $request['email'],
           'phone' => $request['phone'],
-          'is_active' => 0,
+          'is_active' => 1,
+          'is_admin'=>0,
           'password' => Hash::make($request['password']),
         ]);
+        //$user->sendEmailVerificationNotification();
         $subscription = Subscription::findOrFail($request->subscription_id);
         $user->subscriptions()->attach($subscription, ['start_date' => now(), 'is_active' => 1]);
         $user->assignRole('user');
         $token = $user->createToken($request['email'])->plainTextToken;
         DB::commit();
+
         $payload = ['token' => $token];
         return $this->sendResponse($payload);
 
       }
-      $error = ['message' => 'Does not match your name'];
+      $error = ['message' => 'Password must not contain name'];
       return $this->sendError($error);
+    }
+
+    // Helper function to validate password contains name
+    function passContainsName($name, $password)
+    {
+      foreach (explode(" ", $name) as $toCheck) {
+        if (str_contains(strtolower($password), strtolower($toCheck))) {
+          return true;
+        }
+      }
+      return false;
     }
   }

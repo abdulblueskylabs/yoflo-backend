@@ -30,12 +30,16 @@
   Route::post('user/reset-email-password', [forgotPasswordController::class, 'resetPassword']);
   Route::get('subscriptions', [SubscriptionController::class,'index']);
 
+  Route::get('email/verify/{id}', [\App\Http\Controllers\Auth\VerificationController::class,'verify'])->name('verification.verify');
+  Route::get('email/resend', [\App\Http\Controllers\Auth\VerificationController::class,'resend'])->name('verification.resend');
 
   Route::group(['middleware' => ['auth:sanctum', 'role:user']], function() {
 
     // Auth routes
     Route::post('/user/logout', [LoginController::class, 'logout']);
     Route::post('user/change-password', [ResetPasswordController::class, 'changePassword']);
+
+
 
     // User-Subscriptions routes
     Route::get('user/subscription', [UserSubscriptionController::class, 'index']);

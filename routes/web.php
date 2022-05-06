@@ -20,7 +20,7 @@ Route::get('/', function () {
 //Auth::routes();
 
   Route::group(['middleware' => ['auth', 'role:admin']], function() {
-    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+    Route::post('logout', [\App\Http\Controllers\Auth\LoginController::class, 'destroy'])
       ->name('logout');
   });
 
