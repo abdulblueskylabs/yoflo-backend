@@ -18,8 +18,8 @@
         'subscriptionHistory' => $this->collection->map(function ($data) {
           return [
             'type' => $data->name,
-            'startDate' => $data->pivot->start,
-            'endDate' => $data->pivot->end,
+            'startDate' => $data->pivot->start_date,
+            'endDate' => $data->pivot->end_date,
             'is_active' => $data->pivot->is_active
 
           ];

@@ -7,7 +7,6 @@
   use App\Models\User;
   use Illuminate\Http\Request;
   use Illuminate\Support\Facades\Hash;
-  use Illuminate\Support\Facades\Validator;
   use Spatie\Permission\Models\Role;
   use Illuminate\Support\Facades\DB;
 
@@ -18,7 +17,7 @@
     public function register(Request $request)
     {
 
-      $validator = Validator::make($request->all(),
+      $request->validate(
         [
           'first_name' => 'required|string',
           'last_name' => 'required|string',
@@ -28,13 +27,8 @@
           'password_confirmation' => 'required| same:password',
           'subscription_id' => 'required',
         ]);
-      if ($validator->fails()) {
 
-        $error = $validator->errors();
-        return $this->sendError($error);
-      }
-
-      $name=$request->first_name.$request->last_name;
+      $name = $request->first_name . $request->last_name;
       if (!str_contains($request->password, $name)) {
         DB::beginTransaction();
         $user = User::create([
@@ -45,8 +39,8 @@
           'is_active' => 0,
           'password' => Hash::make($request['password']),
         ]);
-        $subscription=Subscription::findOrFail($request->subscription_id);
-        $user->subscriptions()->attach($subscription,['start'=>now(),'is_active'=>1]);
+        $subscription = Subscription::findOrFail($request->subscription_id);
+        $user->subscriptions()->attach($subscription, ['start_date' => now(), 'is_active' => 1]);
         $user->assignRole('user');
         $token = $user->createToken($request['email'])->plainTextToken;
         DB::commit();

@@ -23,6 +23,6 @@ class Subscription extends Model
 
   public function users()
   {
-    return $this->belongsToMany(User::class, 'user_subscription', 'subscription_id', 'user_id')->withPivot('start','end','is_active')->withTimestamps();
+    return $this->belongsToMany(User::class, 'user_subscription', 'subscription_id', 'user_id')->withPivot('start_date','end_date','is_active')->withTimestamps();
   }
 }

@@ -85,7 +85,15 @@
         return response()->json($response, 403);
       }
 
-      if ($e instanceof QueryException || $e instanceof ModelNotFoundException) {
+       if ($e instanceof QueryException ) {
+         $response = [
+           'success' => false,
+           'error' => ['message' => $e->getMessage()]
+         ];
+         return response()->json($response, 403);
+       }
+
+      if ( $e instanceof ModelNotFoundException ) {
         $response = [
           'success' => false,
           'error' => ['message' => $e->getMessage()]

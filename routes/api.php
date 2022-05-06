@@ -7,6 +7,7 @@
   use App\Http\Controllers\API\Auth\forgotPasswordController;
   use App\Http\Controllers\API\Subscription\SubscriptionController;
   use \App\Http\Controllers\API\UserSubscription\UserSubscriptionController;
+  use \App\Http\Controllers\API\UserProfile\UserProfileController;
 
   /*
   |--------------------------------------------------------------------------
@@ -23,20 +24,25 @@
       return $request->user();
   });*/
 
-  Route::post('sign-up', [RegistrationController::class, 'register']);
-  Route::post('login', [LoginController::class, 'login']);
-  Route::post('request-password', [forgotPasswordController::class, 'forgotPassword']);
-  Route::post('reset-email-password', [forgotPasswordController::class, 'resetPassword']);
-  Route::get('subscription', [SubscriptionController::class,'index']);
+  Route::post('user/sign-up', [RegistrationController::class, 'register']);
+  Route::post('user/login', [LoginController::class, 'login']);
+  Route::post('user/request-password', [forgotPasswordController::class, 'forgotPassword']);
+  Route::post('user/reset-email-password', [forgotPasswordController::class, 'resetPassword']);
+  Route::get('subscriptions', [SubscriptionController::class,'index']);
 
 
   Route::group(['middleware' => ['auth:sanctum', 'role:user']], function() {
-    // Auth routes
-    Route::post('logout', [LoginController::class, 'logout']);
-    Route::post('change-password', [ResetPasswordController::class, 'changePassword']);
 
-    //User routes
-    Route::post('user-subscription', [UserSubscriptionController::class, 'index']);
-    Route::put('user-subscription/{id}', [UserSubscriptionController::class, 'update']);
+    // Auth routes
+    Route::post('/user/logout', [LoginController::class, 'logout']);
+    Route::post('user/change-password', [ResetPasswordController::class, 'changePassword']);
+
+    // User-Subscriptions routes
+    Route::get('user/subscription', [UserSubscriptionController::class, 'index']);
+    Route::put('user/subscription/{id}', [UserSubscriptionController::class, 'update']);
+
+    // User-Profile routes
+    Route::get('user/profile', [UserProfileController::class, 'index']);
+    Route::put('user/profile', [UserProfileController::class, 'update']);
 
   });

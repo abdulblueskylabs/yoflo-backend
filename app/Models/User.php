@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
   use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
@@ -46,7 +46,18 @@ class User extends Authenticatable
 
   public function subscriptions()
   {
-    return $this->belongsToMany(Subscription::class, 'user_subscription', 'user_id', 'subscription_id')->withPivot('start','end','is_active')->withTimestamps();
+    return $this->belongsToMany(Subscription::class, 'user_subscription', 'user_id', 'subscription_id')
+      ->withPivot('start_date','end_date','is_active','id')
+    ->withTimestamps();
+  }
+
+  // Function provide active subscription only from pivot table =user_subscription
+  public function activeSubscriptions()
+  {
+    return $this->belongsToMany(Subscription::class, 'user_subscription', 'user_id', 'subscription_id')
+        ->withPivot('is_active','id')
+      ->wherePivot('is_active',1);
+
   }
 
 

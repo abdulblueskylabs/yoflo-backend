@@ -14,17 +14,10 @@
     // Change password function for api user
     public function changePassword(Request $request)
     {
-
-      $validator = Validator::make($request->all(),
-        [
-          'password' => 'required|string|min:7',
-          'password_confirmation' => 'required| same:password'
-        ]);
-
-      if ($validator->fails()) {
-        $error = $validator->errors();
-        return $this->sendError($error);
-      }
+      $request->validate([
+        'password' => 'required|string|min:7',
+        'password_confirmation' => 'required| same:password'
+      ]);
 
       $user = Auth::user();
       $name = $user->first_name . ' ' . $user->last_name;

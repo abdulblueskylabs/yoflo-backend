@@ -13,7 +13,18 @@
      */
     public function toArray($request)
     {
-      return parent::toArray($request);
+
+      return [
+        'subscriptionHistory' => $this->collection->map(function ($data) {
+          return [
+            'type' => $data->first_name,
+            'startDate' => $data->last_name,
+            'endDate' => $data->email,
+            'is_active' => $data->email_verified_at
+
+          ];
+        })
+      ];
     }
 
   }

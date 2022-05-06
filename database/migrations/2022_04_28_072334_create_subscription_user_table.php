@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id');
             $table->integer('subscription_id');
-            $table->date('start');
-            $table->date('end')->nullable();
+            $table->date('start_date');
+            $table->date('end_date')->nullable();
             $table->boolean('is_active');
             $table->timestamps();
         });

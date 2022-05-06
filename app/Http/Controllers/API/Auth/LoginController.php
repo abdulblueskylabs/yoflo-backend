@@ -17,15 +17,10 @@
     // Login function for Api user
     public function login(Request $request)
     {
-      $validator = Validator::make($request->all(), [
+      $request->validate([
         'email' => 'required|email|max:191',
         'password' => 'required|string',
       ]);
-
-      if ($validator->fails()) {
-        $error = $validator->errors();
-        return $this->sendError($error);
-      }
 
       $user = User::where('email', $request['email'])->first();
 

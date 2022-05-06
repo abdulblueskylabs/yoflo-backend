@@ -12,7 +12,6 @@
   use Illuminate\Http\Request;
   use Illuminate\Support\Facades\Auth;
 
-
   class UserSubscriptionController extends Controller
   {
     /**
@@ -31,9 +30,8 @@
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -42,15 +40,20 @@
 
       if (!$user || !$id)
         return $this->sendError(['message' => 'No data available']);
-      else
-      {
-        $current_subscription=$user->subscriptions()->wherePivot('is_active',1)->first();
+      else {
+        // Find existing subscription
+        $current_subscription = $user->activeSubscriptions()->first();
 
-        $attributes=['end'=>Carbon::now(), 'is_active'=>0];
-        $user->subscriptions()->updateExistingPivot($current_subscription,$attributes);
-        $subscription=Subscription::findOrFail($id);
-        $user->subscriptions()->attach($subscription,['start'=>now(),'is_active'=>1]);
-        return $this->sendResponse(['newSubscription' => $subscription->name] );
+        // Update existing subscription
+        $attributes = ['end_date' => Carbon::now(), 'is_active' => 0];
+        $user->activeSubscriptions()->updateExistingPivot($current_subscription, $attributes);
+
+        // Find new subscription
+        $subscription = Subscription::findOrFail($id);
+
+        // Update in pivot table
+        $user->subscriptions()->attach($subscription, ['start_date' => now(), 'is_active' => 1]);
+        return $this->sendResponse(['newSubscription' => $subscription->name]);
       }
 
     }
