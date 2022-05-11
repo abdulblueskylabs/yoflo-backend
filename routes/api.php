@@ -38,7 +38,7 @@ Route::get('subscriptions', [SubscriptionController::class, 'index']);
 Route::get('email/verify/{id}', [VerificationController::class, 'verify'])->name('verification.verify');
 Route::get('email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
 
-Route::group(['prefix' => 'api/user', 'middleware' => ['auth:sanctum', 'role:user']], function () {
+Route::group(['prefix' => 'user', 'middleware' => ['auth:sanctum', 'role:user']], function () {
 
   // Auth routes
   Route::post('logout', [LoginController::class, 'logout']);
