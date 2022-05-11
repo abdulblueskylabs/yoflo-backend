@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\Auth\VerificationController;
 use App\Http\Controllers\API\Auth\forgotPasswordController;
 use App\Http\Controllers\API\Auth\LoginController;
 use App\Http\Controllers\API\Auth\RegistrationController;
@@ -8,6 +7,7 @@ use App\Http\Controllers\API\Auth\ResetPasswordController;
 use App\Http\Controllers\API\Subscription\SubscriptionController;
 use App\Http\Controllers\API\UserProfile\UserProfileController;
 use App\Http\Controllers\API\UserSubscription\UserSubscriptionController;
+use App\Http\Controllers\Auth\VerificationController;
 use Illuminate\Support\Facades\Route;
 
 /*
