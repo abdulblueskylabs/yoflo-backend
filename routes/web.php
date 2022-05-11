@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
-Route::group(['prefix' => 'admin','namespace'=>'\App\Http\Controllers'], function() {
+Route::group(['namespace'=>'\App\Http\Controllers'], function() {
   Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
   Route::post('login', 'Auth\LoginController@login');
 
@@ -31,9 +31,14 @@ Route::group(['prefix' => 'admin','namespace'=>'\App\Http\Controllers'], functio
 });
 
 
-
+ // Protected admin routes
   Route::group(['middleware' => ['auth', 'role:admin'],'namespace'=>'\App\Http\Controllers'], function() {
-    Route::post('logout', 'Auth\LoginController@logout')->name('logout');
-  });
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+  });
+Route::post('logout', '\App\Http\Controllers\Auth\LoginController@logout')->name('logout');
+
+// Protected user routes
+Route::group(['middleware' => ['auth', 'role:user'],'namespace'=>'\App\Http\Controllers'], function() {
+  Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+});
