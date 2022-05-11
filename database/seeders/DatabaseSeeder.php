@@ -16,5 +16,6 @@
       // \App\Models\User::factory(10)->create();
       $this->call(RolesTableSeeder::class);
       $this->call(SubscriptionTableSeeder::class);
+      $this->call(AdminSeeder::class);
     }
   }

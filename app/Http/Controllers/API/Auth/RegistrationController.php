@@ -38,7 +38,6 @@
           'email' => $request['email'],
           'phone' => $request['phone'],
           'is_active' => 1,
-          'is_admin'=>0,
           'password' => Hash::make($request['password']),
         ]);
         //$user->sendEmailVerificationNotification();
