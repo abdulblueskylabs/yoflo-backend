@@ -14,18 +14,18 @@
   {
     //
     //Register user for Api user
-    public function register(Request $request)
+    public function register (Request $request)
     {
 
       $request->validate(
         [
-          'first_name' => 'required|string',
-          'last_name' => 'required|string',
-          'phone' => 'required|unique:users',
-          'email' => 'required|email|max:191|unique:users,email',
-          'password' => 'required|string|min:7',
+          'first_name'            => 'required|string',
+          'last_name'             => 'required|string',
+          'phone'                 => 'required|unique:users',
+          'email'                 => 'required|email|max:191|unique:users,email',
+          'password'              => 'required|string|min:7',
           'password_confirmation' => 'required| same:password',
-          'subscription_id' => 'required',
+          'subscription_id'       => 'required',
         ]);
 
       $name = $request->first_name . $request->last_name;
@@ -33,13 +33,13 @@
 
         DB::beginTransaction();
         $user = User::create([
-          'first_name' => $request['first_name'],
-          'last_name' => $request['last_name'],
-          'email' => $request['email'],
-          'phone' => $request['phone'],
-          'is_active' => 1,
-          'password' => Hash::make($request['password']),
-        ]);
+                               'first_name' => $request['first_name'],
+                               'last_name'  => $request['last_name'],
+                               'email'      => $request['email'],
+                               'phone'      => $request['phone'],
+                               'is_active'  => 1,
+                               'password'   => Hash::make($request['password']),
+                             ]);
         //$user->sendEmailVerificationNotification();
         $subscription = Subscription::findOrFail($request->subscription_id);
         $user->subscriptions()->attach($subscription, ['start_date' => now(), 'is_active' => 1]);
@@ -56,7 +56,7 @@
     }
 
     // Helper function to validate password contains name
-    function passContainsName($name, $password)
+    function passContainsName ($name, $password)
     {
       foreach (explode(" ", $name) as $toCheck) {
         if (str_contains(strtolower($password), strtolower($toCheck))) {

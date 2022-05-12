@@ -11,12 +11,12 @@
   {
     //
     // send email with instruction
-    public function forgotPassword(Request $request)
+    public function forgotPassword (Request $request)
     {
       $validator = Validator::make($request->all(),
-        [
-          'email' => 'required|email|exists:users,email',
-        ]);
+                                   [
+                                     'email' => 'required|email|exists:users,email',
+                                   ]);
 
       if ($validator->fails()) {
         $error = $validator->errors();
@@ -32,19 +32,19 @@
         return $this->sendResponse($payload);
       } else {
         throw ValidationException::withMessages([
-          'email' => __($status)
-        ]);
+                                                  'email' => __($status),
+                                                ]);
       }
     }
 
-    public function resetPassword(Request $request)
+    public function resetPassword (Request $request)
     {
       $validator = Validator::make($request->all(),
-        [
-          'token' => 'required',
-          'email' => 'required|email',
-          'password' => 'required|min:7|confirmed',
-        ]);
+                                   [
+                                     'token'    => 'required',
+                                     'email'    => 'required|email',
+                                     'password' => 'required|min:7|confirmed',
+                                   ]);
 
     }
   }

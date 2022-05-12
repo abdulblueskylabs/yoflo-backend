@@ -15,7 +15,7 @@
      * @return \Illuminate\Http\Response
      */
 
-    public function index()
+    public function index ()
     {
       // Get the active subscriptions
       $subscriptions = Subscription::where('is_active', 1)->get();

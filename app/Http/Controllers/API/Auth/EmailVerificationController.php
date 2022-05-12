@@ -1,32 +1,29 @@
 <?php
 
-namespace App\Http\Controllers\API\Auth;
+  namespace App\Http\Controllers\API\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Http\Request;
+  use App\Http\Controllers\Controller;
+  use App\Models\User;
+  use Illuminate\Http\Request;
 
-class EmailVerificationController extends Controller
-{
+  class EmailVerificationController extends Controller
+  {
     //
 
-  public function verify($user_id, Request $request)
-  {
-    if(!$request->hasValidSignature())
+    public function verify ($user_id, Request $request)
     {
-      return $this->sendError(['message'=>'unauthorized user']);
+      if (!$request->hasValidSignature()) {
+        return $this->sendError(['message' => 'unauthorized user']);
+      }
+      $user = User::findOrFail($user_id);
+      if (!$user->hasverifiedEmail()) {
+        $user->markEmailAsVerified();
+      }
+
     }
-    $user=User::findOrFail($user_id);
-    if(!$user->hasverifiedEmail())
+
+    public function resend ()
     {
-      $user->markEmailAsVerified();
+
     }
-
   }
-
-
-  public function resend()
-  {
-
-  }
-}

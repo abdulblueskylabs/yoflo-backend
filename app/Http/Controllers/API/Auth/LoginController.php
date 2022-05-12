@@ -15,12 +15,12 @@
   {
 
     // Login function for Api user
-    public function login(Request $request)
+    public function login (Request $request)
     {
       $request->validate([
-        'email' => 'required|email|max:191',
-        'password' => 'required|string',
-      ]);
+                           'email'    => 'required|email|max:191',
+                           'password' => 'required|string',
+                         ]);
 
       $user = User::where('email', $request['email'])->first();
 
@@ -37,7 +37,7 @@
     }
 
     // Logout function for api user
-    public function logout(Request $request)
+    public function logout (Request $request)
     {
       // Revoke the token that was used to authenticate the current request
       $request->user()->currentAccessToken()->delete();
