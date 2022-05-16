@@ -16,6 +16,8 @@
    */
   protected $fillable = [
     'name',
+    'user_id',
+    'parent_folder_id'
   ];
 
   public function getParentKeyName ()
@@ -35,6 +37,8 @@
     {
       return $this->belongsTo(User::class);
     }
+
+
 }
 
 

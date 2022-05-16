@@ -18,6 +18,7 @@ return new class extends Migration
           $table->integer('user_id');
           $table->string('name');
           $table->unsignedBigInteger('parent_folder_id')->nullable();
+          $table->unsignedBigInteger('child_folder_id')->nullable();
           $table->timestamps();
         });
     }

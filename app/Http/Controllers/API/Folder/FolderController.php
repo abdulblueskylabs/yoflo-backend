@@ -1,40 +1,34 @@
 <?php
 
-  namespace App\Http\Controllers\API\UserProfile;
+  namespace App\Http\Controllers\API\Folder;
 
   use App\Http\Controllers\Controller;
-  use App\Http\Resources\UserCollection;
-  use App\Http\Traits\ResponseTrait;
+  use App\Models\Folder;
   use Illuminate\Http\Request;
+  use \App\Http\Traits\ResponseTrait;
   use Illuminate\Support\Facades\Auth;
 
-  class UserProfileController extends Controller
+  class FolderController extends Controller
   {
     use ResponseTrait;
 
     /**
-     * Display a listing of the user's with current subscription
+     * Display a listing of the resource.
      * @return \Illuminate\Http\Response
      */
     public function index ()
     {
-      $user = Auth::user();
-      $current_subscription = $user->activeSubscriptions()->first();
-
-      if (!$user || !$current_subscription)
-        return $this->sendError(['message' => 'No data available']);
-
-      $response = ['firstName' => $user->first_name, 'lastName' => $user->last_name, 'email' => $user->email, 'emailVerified' => $user->email_verified_at, 'subscriptionType' => $current_subscription->name];
-      return $this->sendResponse($response);
+      //
     }
 
     /**
      * Show the form for creating a new resource.
      * @return \Illuminate\Http\Response
      */
-    public function create ()
+    public function create (Request $request)
     {
       //
+
     }
 
     /**
@@ -44,7 +38,24 @@
      */
     public function store (Request $request)
     {
-      //
+      $user = Auth::user();
+      if (!$request->parent_folder_id) {
+        $folder = Folder::create(
+          [
+            'user_id' => $user->id,
+            'name'    => $request->name ?: 'default',
+          ]);
+
+      } else {
+        $folder = Folder::create(
+          [
+            'user_id'   => $user->id,
+            'name'      => $request->name ?: 'default',
+            'parent_folder_id' => $request->parent_folder_id,
+          ]);
+      }
+      $payload = ['id' => $folder->id];
+      return $this->sendResponse($payload);
     }
 
     /**
@@ -55,6 +66,16 @@
     public function show ($id)
     {
       //
+      $user = Auth::user();
+      $root_folders=Folder::where('user_id',$user->id)->where('parent_folder_id')->get();
+      if(!$root_folders)
+      {
+        $payload=$root_folders;
+        return $this->sendResponse($payload );
+      }
+      $error=['message'=>'No folder found'];
+      $this->sendError($error);
+
     }
 
     /**
@@ -65,7 +86,6 @@
     public function edit ($id)
     {
       //
-
     }
 
     /**
@@ -74,24 +94,9 @@
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update (Request $request)
+    public function update (Request $request, $id)
     {
-
       //
-      $validated = $request->validate([
-
-       'first_name' => 'required',
-       'last_name'  => 'required',
-                                        ]);
-
-      $user = Auth::user();
-
-      $user->first_name = $request->first_name;
-      $user->last_name = $request->last_name;
-      $user->save();
-      $response = ['name' => $user->first_name . ' ' . $user->last_name];
-      return $this->sendResponse($response);
-
     }
 
     /**

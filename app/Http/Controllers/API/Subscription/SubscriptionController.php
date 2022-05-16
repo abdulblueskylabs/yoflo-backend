@@ -4,11 +4,13 @@
 
   use App\Http\Controllers\Controller;
   use App\Http\Resources\SubscriptionCollection;
+  use App\Http\Traits\ResponseTrait;
   use App\Models\Subscription;
   use Illuminate\Http\Request;
 
   class SubscriptionController extends Controller
   {
+    use ResponseTrait;
 
     /**
      * Display a listing of the active subscriptions Tier Details

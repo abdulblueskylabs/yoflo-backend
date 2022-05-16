@@ -3,26 +3,25 @@
   namespace App\Http\Controllers\API\Auth;
 
   use App\Http\Controllers\Controller;
+  use App\Http\Traits\ResponseTrait;
   use App\Models\User;
-  use http\Client\Response;
   use Illuminate\Http\Request;
-  use Illuminate\Support\Facades\Auth;
   use Illuminate\Support\Facades\Hash;
-  use Illuminate\Support\Facades\Validator;
-  use Laravel\Sanctum\PersonalAccessToken;
 
   class LoginController extends Controller
   {
+    use ResponseTrait;
 
     // Login function for Api user
     public function login (Request $request)
     {
-      $request->validate([
-                           'email'    => 'required|email|max:191',
-                           'password' => 'required|string',
-                         ]);
+      $request->validate(
+        [
+          'email'    => 'required|email|max:191',
+          'password' => 'required|string',
+        ]);
 
-      $user = User::where('email', $request['email'])->first();
+      $user = User::where('email', $request['email'])->where('is_active',1)->first();
 
       if (!$user || !Hash::check($request['password'], $user->password)) {
         $error = ['message' => 'Invalid Credentials'];

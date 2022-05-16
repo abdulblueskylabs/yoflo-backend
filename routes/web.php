@@ -30,7 +30,7 @@ Route::group(['namespace' => '\App\Http\Controllers'], function () {
 
 
 // Protected admin routes
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth','is_active']], function () {
   Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 });

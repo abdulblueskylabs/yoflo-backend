@@ -3,12 +3,14 @@
   namespace App\Http\Controllers\API\Auth;
 
   use App\Http\Controllers\Controller;
+  use App\Http\Traits\ResponseTrait;
   use Illuminate\Http\Request;
   use Illuminate\Support\Facades\Password;
   use Illuminate\Support\Facades\Validator;
 
   class forgotPasswordController extends Controller
   {
+    use ResponseTrait;
     //
     // send email with instruction
     public function forgotPassword (Request $request)

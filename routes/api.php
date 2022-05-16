@@ -8,6 +8,7 @@ use App\Http\Controllers\API\Subscription\SubscriptionController;
 use App\Http\Controllers\API\UserProfile\UserProfileController;
 use App\Http\Controllers\API\UserSubscription\UserSubscriptionController;
 use App\Http\Controllers\Auth\VerificationController;
+use \App\Http\Controllers\API\Folder\FolderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,7 +39,7 @@ Route::get('subscriptions', [SubscriptionController::class, 'index']);
 Route::get('email/verify/{id}', [VerificationController::class, 'verify'])->name('verification.verify');
 Route::get('email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
 
-Route::group(['prefix' => 'user', 'middleware' => ['auth:sanctum', 'role:user']], function () {
+Route::group(['prefix' => 'user', 'middleware' => ['auth:sanctum', 'role:user','is_active']], function () {
 
   // Auth routes
   Route::post('logout', [LoginController::class, 'logout']);
@@ -52,5 +53,12 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth:sanctum', 'role:user']]
   // User-Profile routes
   Route::get('profile', [UserProfileController::class, 'index']);
   Route::put('profile', [UserProfileController::class, 'update']);
+
+  // Folder routes
+  Route::get('folder', [FolderController::class, 'index']);
+  Route::post('folder', [FolderController::class, 'store']);
+  Route::put('folder/{id}', [FolderController::class, 'update']);
+  Route::delete('folder/{id}', [FolderController::class, 'delete']);
+
 
 });

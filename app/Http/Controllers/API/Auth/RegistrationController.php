@@ -3,6 +3,7 @@
   namespace App\Http\Controllers\API\Auth;
 
   use App\Http\Controllers\Controller;
+  use App\Http\Traits\ResponseTrait;
   use App\Models\Subscription;
   use App\Models\User;
   use Illuminate\Http\Request;
@@ -12,7 +13,8 @@
 
   class RegistrationController extends Controller
   {
-    //
+    use ResponseTrait;
+
     //Register user for Api user
     public function register (Request $request)
     {
@@ -32,14 +34,15 @@
       if (!str_contains(strtolower($request->password), strtolower($name)) || !$this->passContainsName($name, $request->password)) {
 
         DB::beginTransaction();
-        $user = User::create([
-                               'first_name' => $request['first_name'],
-                               'last_name'  => $request['last_name'],
-                               'email'      => $request['email'],
-                               'phone'      => $request['phone'],
-                               'is_active'  => 1,
-                               'password'   => Hash::make($request['password']),
-                             ]);
+        $user = User::create(
+          [
+            'first_name' => $request['first_name'],
+            'last_name'  => $request['last_name'],
+            'email'      => $request['email'],
+            'phone'      => $request['phone'],
+            'is_active'  => 1,
+            'password'   => Hash::make($request['password']),
+          ]);
         //$user->sendEmailVerificationNotification();
         $subscription = Subscription::findOrFail($request->subscription_id);
         $user->subscriptions()->attach($subscription, ['start_date' => now(), 'is_active' => 1]);

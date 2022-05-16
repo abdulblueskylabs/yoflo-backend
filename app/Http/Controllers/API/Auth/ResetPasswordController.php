@@ -3,6 +3,7 @@
   namespace App\Http\Controllers\API\Auth;
 
   use App\Http\Controllers\Controller;
+  use App\Http\Traits\ResponseTrait;
   use Illuminate\Http\Request;
   use Illuminate\Support\Facades\Auth;
   use Illuminate\Support\Facades\Hash;
@@ -10,7 +11,8 @@
 
   class ResetPasswordController extends Controller
   {
-    //
+    use ResponseTrait;
+
     // Change password function for api user
     public function changePassword(Request $request)
     {

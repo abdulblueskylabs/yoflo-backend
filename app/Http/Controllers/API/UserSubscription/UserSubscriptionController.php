@@ -6,6 +6,7 @@
   use App\Http\Resources\SubscriptionCollection;
   use App\Http\Resources\UserCollection;
   use App\Http\Resources\UserSubscriptionCollection;
+  use App\Http\Traits\ResponseTrait;
   use App\Models\Subscription;
   use App\Models\User;
   use Carbon\Carbon;
@@ -14,6 +15,7 @@
 
   class UserSubscriptionController extends Controller
   {
+    use ResponseTrait;
     /**
      * Display a listing of the active subscriptions Tier Details
      * @return \Illuminate\Http\Response
