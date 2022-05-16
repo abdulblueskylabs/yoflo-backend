@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('folders', function (Blueprint $table) {
           $table->id();
-          $table->integer('user_id');
+          $table->unsignedBigInteger('user_id');
           $table->string('name');
           $table->unsignedBigInteger('parent_folder_id')->nullable();
           $table->unsignedBigInteger('child_folder_id')->nullable();

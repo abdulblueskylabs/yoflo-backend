@@ -23,7 +23,7 @@
         $error=['message'=>'User is not active'];
         return $this->sendError($error);
       }
-      return redirect()->back();
+      return $next($request);
 
     }
   }

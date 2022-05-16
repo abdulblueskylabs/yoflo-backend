@@ -1,64 +1,65 @@
 <?php
 
-use App\Http\Controllers\API\Auth\forgotPasswordController;
-use App\Http\Controllers\API\Auth\LoginController;
-use App\Http\Controllers\API\Auth\RegistrationController;
-use App\Http\Controllers\API\Auth\ResetPasswordController;
-use App\Http\Controllers\API\Subscription\SubscriptionController;
-use App\Http\Controllers\API\UserProfile\UserProfileController;
-use App\Http\Controllers\API\UserSubscription\UserSubscriptionController;
-use App\Http\Controllers\Auth\VerificationController;
-use \App\Http\Controllers\API\Folder\FolderController;
-use Illuminate\Support\Facades\Route;
+  use App\Http\Controllers\API\Auth\forgotPasswordController;
+  use App\Http\Controllers\API\Auth\LoginController;
+  use App\Http\Controllers\API\Auth\RegistrationController;
+  use App\Http\Controllers\API\Auth\ResetPasswordController;
+  use App\Http\Controllers\API\Subscription\SubscriptionController;
+  use App\Http\Controllers\API\UserProfile\UserProfileController;
+  use App\Http\Controllers\API\UserSubscription\UserSubscriptionController;
+  use App\Http\Controllers\Auth\VerificationController;
+  use \App\Http\Controllers\API\Folder\FolderController;
+  use \App\Http\Controllers\API\Yoflo\YofloController;
+  use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
+  /*
+  |--------------------------------------------------------------------------
+  | API Routes
+  |--------------------------------------------------------------------------
+  |
+  | Here is where you can register API routes for your application. These
+  | routes are loaded by the RouteServiceProvider within a group which
+  | is assigned the "api" middleware group. Enjoy building your API!
+  |
+  */
 
 // All routes have default prefix => api
 
-Route::prefix('user')->group(function () {
+  Route::prefix('user')->group(function () {
 
-  Route::post('sign-up', [RegistrationController::class, 'register']);
-  Route::post('login', [LoginController::class, 'login']);
-  Route::post('request-password', [forgotPasswordController::class, 'forgotPassword']);
-  Route::post('reset-email-password', [forgotPasswordController::class, 'resetPassword']);
+    Route::post('sign-up', [RegistrationController::class, 'register']);
+    Route::post('login', [LoginController::class, 'login']);
+    Route::post('request-password', [forgotPasswordController::class, 'forgotPassword']);
+    Route::post('reset-email-password', [forgotPasswordController::class, 'resetPassword']);
 
-});
+  });
 
+  Route::get('subscriptions', [SubscriptionController::class, 'index']);
 
-Route::get('subscriptions', [SubscriptionController::class, 'index']);
+  Route::get('email/verify/{id}', [VerificationController::class, 'verify'])->name('verification.verify');
+  Route::get('email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
 
-Route::get('email/verify/{id}', [VerificationController::class, 'verify'])->name('verification.verify');
-Route::get('email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
+  Route::group(['prefix' => 'user', 'middleware' => ['auth:sanctum', 'role:user', 'is_active']], function () {
 
-Route::group(['prefix' => 'user', 'middleware' => ['auth:sanctum', 'role:user','is_active']], function () {
+    // Auth routes
+    Route::post('logout', [LoginController::class, 'logout']);
+    Route::post('change-password', [ResetPasswordController::class, 'changePassword']);
 
-  // Auth routes
-  Route::post('logout', [LoginController::class, 'logout']);
-  Route::post('change-password', [ResetPasswordController::class, 'changePassword']);
+    // User-Subscriptions routes
+    Route::get('subscription', [UserSubscriptionController::class, 'index']);
+    Route::put('subscription/{id}', [UserSubscriptionController::class, 'update']);
 
+    // User-Profile routes
+    Route::get('profile', [UserProfileController::class, 'index']);
+    Route::put('profile', [UserProfileController::class, 'update']);
 
-  // User-Subscriptions routes
-  Route::get('subscription', [UserSubscriptionController::class, 'index']);
-  Route::put('subscription/{id}', [UserSubscriptionController::class, 'update']);
+    // Folder routes
+    Route::get('folder', [FolderController::class, 'index']);
+    Route::get('folder/{id}', [FolderController::class, 'show']);
+    Route::post('folder', [FolderController::class, 'store']);
+    Route::put('folder/{id}', [FolderController::class, 'update']);
 
-  // User-Profile routes
-  Route::get('profile', [UserProfileController::class, 'index']);
-  Route::put('profile', [UserProfileController::class, 'update']);
+    // Yoflo routes
+    Route::post('yoflo', [YofloController::class, 'store']);
 
-  // Folder routes
-  Route::get('folder', [FolderController::class, 'index']);
-  Route::post('folder', [FolderController::class, 'store']);
-  Route::put('folder/{id}', [FolderController::class, 'update']);
-  Route::delete('folder/{id}', [FolderController::class, 'delete']);
-
-
-});
+  });

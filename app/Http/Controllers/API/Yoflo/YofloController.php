@@ -1,31 +1,26 @@
 <?php
 
-  namespace App\Http\Controllers\API\UserProfile;
+  namespace App\Http\Controllers\API\Yoflo;
 
   use App\Http\Controllers\Controller;
-  use App\Http\Resources\UserCollection;
   use App\Http\Traits\ResponseTrait;
+  use App\Models\Yoflo;
   use Illuminate\Http\Request;
   use Illuminate\Support\Facades\Auth;
+  use Illuminate\Validation\Rule;
 
-  class UserProfileController extends Controller
+  class YofloController extends Controller
   {
+
     use ResponseTrait;
 
     /**
-     * Display a listing of the user's with current subscription
+     * Display a listing of the resource.
      * @return \Illuminate\Http\Response
      */
     public function index ()
     {
-      $user = Auth::user();
-      $current_subscription = $user->activeSubscriptions()->first();
-
-      if (!$user || !$current_subscription)
-        return $this->sendError(['message' => 'No data available']);
-
-      $response = ['firstName' => $user->first_name, 'lastName' => $user->last_name, 'email' => $user->email, 'emailVerified' => $user->email_verified_at, 'subscriptionType' => $current_subscription->name];
-      return $this->sendResponse($response);
+      //
     }
 
     /**
@@ -44,7 +39,27 @@
      */
     public function store (Request $request)
     {
-      //
+      $request->validate(
+        [
+          'folder_id' => 'required',
+          'title'     => Rule::unique('yoflos')->where(function ($query) {
+            return $query->where('user_id', Auth::id());
+          }),
+        ]);
+
+      $user = Auth::user();
+
+      $yoflo = Yoflo::create(
+        [
+          'user_id'     => $user->id,
+          'title'       => $request->title,
+          'description' => $request->description,
+          'folder_id'   => $request->folder_id,
+        ]);
+
+      $payload = ['id' => $yoflo->id];
+      return $this->sendResponse($payload);
+
     }
 
     /**
@@ -65,7 +80,6 @@
     public function edit ($id)
     {
       //
-
     }
 
     /**
@@ -74,23 +88,9 @@
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update (Request $request)
+    public function update (Request $request, $id)
     {
-
-      $request->validate(
-        [
-          'first_name' => 'required',
-          'last_name'  => 'required',
-        ]);
-
-      $user = Auth::user();
-
-      $user->first_name = $request->first_name;
-      $user->last_name = $request->last_name;
-      $user->save();
-      $response = ['name' => $user->first_name . ' ' . $user->last_name];
-      return $this->sendResponse($response);
-
+      //
     }
 
     /**

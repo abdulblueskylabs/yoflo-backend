@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_subscription', function (Blueprint $table) {
+        Schema::create('yoflos', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->string('description');
+            $table->unsignedBigInteger('folder_id');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('subscription_id');
-            $table->date('start_date');
-            $table->date('end_date')->nullable();
-            $table->boolean('is_active');
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_subscription');
+        Schema::dropIfExists('yoflos');
     }
 };

@@ -7,6 +7,7 @@
   use Illuminate\Http\Request;
   use \App\Http\Traits\ResponseTrait;
   use Illuminate\Support\Facades\Auth;
+  use Illuminate\Validation\Rule;
 
   class FolderController extends Controller
   {
@@ -18,17 +19,16 @@
      */
     public function index ()
     {
-      //
-    }
+      $user = Auth::user();
 
-    /**
-     * Show the form for creating a new resource.
-     * @return \Illuminate\Http\Response
-     */
-    public function create (Request $request)
-    {
-      //
+      $root_folders = Folder::where('user_id', $user->id)->where('parent_folder_id', null)->get();
+      if (!$root_folders) {
+        $error = ['message' => 'No folder found'];
+        $this->sendError($error);
+      }
 
+      $payload = $root_folders;
+      return $this->sendResponse($payload);
     }
 
     /**
@@ -39,53 +39,33 @@
     public function store (Request $request)
     {
       $user = Auth::user();
-      if (!$request->parent_folder_id) {
-        $folder = Folder::create(
-          [
-            'user_id' => $user->id,
-            'name'    => $request->name ?: 'default',
-          ]);
+      $request->validate(
+        [
+          'name' => 'required',
+        ]);
+      $folder=Folder::where('parent_folder_id',$request->parent_folder_id )->where('user_id',Auth::id())->first();
+      if(!$folder) {
 
-      } else {
-        $folder = Folder::create(
-          [
-            'user_id'   => $user->id,
-            'name'      => $request->name ?: 'default',
-            'parent_folder_id' => $request->parent_folder_id,
-          ]);
+        if (!$request->parent_folder_id) {
+          $folder = Folder::create(
+            [
+              'user_id' => $user->id,
+              'name'    => $request->name ?: 'default',
+            ]);
+
+        } else {
+          $folder = Folder::create(
+            [
+              'user_id'          => $user->id,
+              'name'             => $request->name ?: 'default',
+              'parent_folder_id' => $request->parent_folder_id,
+            ]);
+        }
+
+        $payload = ['id' => $folder->id];
+        return $this->sendResponse($payload);
       }
-      $payload = ['id' => $folder->id];
-      return $this->sendResponse($payload);
-    }
-
-    /**
-     * Display the specified resource.
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show ($id)
-    {
-      //
-      $user = Auth::user();
-      $root_folders=Folder::where('user_id',$user->id)->where('parent_folder_id')->get();
-      if(!$root_folders)
-      {
-        $payload=$root_folders;
-        return $this->sendResponse($payload );
-      }
-      $error=['message'=>'No folder found'];
-      $this->sendError($error);
-
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit ($id)
-    {
-      //
+      return $this->sendError(['message'=>'folder Already exists']);
     }
 
     /**
@@ -96,7 +76,19 @@
      */
     public function update (Request $request, $id)
     {
-      //
+      $user = Auth::user();
+
+
+        $folder = Folder::create(
+          [
+            'user_id'          => $user->id,
+            'name'             => $request->name ?: 'default',
+            'parent_folder_id' => $request->parent_folder_id,
+          ]);
+
+
+      $payload = ['id' => $folder->id];
+      return $this->sendResponse($payload);
     }
 
     /**

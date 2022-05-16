@@ -61,11 +61,18 @@
     }
 
     /**
-     * Get the folders for the blog user.
+     * Get the folders for the  user.
      */
     public function folders ()
     {
       return $this->hasMany(Folder::class);
     }
 
+    /**
+     * Get the yoflos for the  user.
+     */
+    public function yoflos ()
+    {
+      return $this->hasMany(Yoflo::class);
+    }
   }
