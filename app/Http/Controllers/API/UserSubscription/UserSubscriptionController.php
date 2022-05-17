@@ -24,9 +24,6 @@
     public function index ()
     {
       $user = Auth::user();
-
-      if ($user->isEmpty())
-        return $this->sendError(['message' => 'No data available']);
       return $this->sendResponse(new UserSubscriptionCollection($user->subscriptions));
     }
 
@@ -40,9 +37,11 @@
     {
       $user = Auth::user();
 
-      if (!$id)
+      $subscritpion=Subscription::findorfail($id)->first();
+      if (!$subscritpion)
         return $this->sendError(['message' => 'No data available']);
       else {
+
         // Find existing subscription
         $current_subscription = $user->activeSubscriptions()->first();
 

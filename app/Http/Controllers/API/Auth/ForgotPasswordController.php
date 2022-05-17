@@ -11,14 +11,16 @@
   class forgotPasswordController extends Controller
   {
     use ResponseTrait;
+
     //
     // send email with instruction
     public function forgotPassword (Request $request)
     {
-      $validator = Validator::make($request->all(),
-                                   [
-                                     'email' => 'required|email|exists:users,email',
-                                   ]);
+      $validator = Validator::make(
+        $request->all(),
+        [
+          'email' => 'required|email|exists:users,email',
+        ]);
 
       if ($validator->fails()) {
         $error = $validator->errors();
@@ -33,20 +35,22 @@
         $payload = ['message' => __($status)];
         return $this->sendResponse($payload);
       } else {
-        throw ValidationException::withMessages([
-                                                  'email' => __($status),
-                                                ]);
+        throw ValidationException::withMessages(
+          [
+            'email' => __($status),
+          ]);
       }
     }
 
     public function resetPassword (Request $request)
     {
-      $validator = Validator::make($request->all(),
-                                   [
-                                     'token'    => 'required',
-                                     'email'    => 'required|email',
-                                     'password' => 'required|min:7|confirmed',
-                                   ]);
+      $validator = Validator::make(
+        $request->all(),
+        [
+          'token'    => 'required',
+          'email'    => 'required|email',
+          'password' => 'required|min:7|confirmed',
+        ]);
 
     }
   }

@@ -21,13 +21,16 @@
       $user = Auth::user();
       $current_subscription = $user->activeSubscriptions()->first();
 
-      if ($current_subscription->isEmpty())
+      if (!$current_subscription)
         return $this->sendError(['message' => 'No data available']);
 
-      $response = ['firstName' => $user->first_name, 'lastName' => $user->last_name, 'email' => $user->email, 'emailVerified' => $user->email_verified_at, 'subscriptionType' => $current_subscription->name];
+      $response = ['firstName'        => $user->first_name,
+                   'lastName'         => $user->last_name,
+                   'email'            => $user->email,
+                   'emailVerified'    => $user->email_verified_at,
+                   'subscriptionType' => $current_subscription->name];
       return $this->sendResponse($response);
     }
-
 
     /**
      * Update the specified resource in storage.

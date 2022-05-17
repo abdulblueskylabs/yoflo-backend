@@ -21,9 +21,9 @@
     public function index ()
     {
       $yoflos = Yoflo::where('user_id', Auth::id())->get();
-      if (!$yoflos) {
+      if ($yoflos->isEmpty()) {
         $error = ['message' => 'No data'];
-       return  $this->sendError($error);
+        return $this->sendError($error);
       }
       return $this->sendResponse($yoflos);
 
@@ -77,16 +77,6 @@
     }
 
     /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit ($id)
-    {
-      //
-    }
-
-    /**
      * Update the specified resource in storage.
      * @param \Illuminate\Http\Request $request
      * @param int $id
@@ -94,7 +84,22 @@
      */
     public function update (Request $request, $id)
     {
-      //
+      $request->validate(
+        [
+          'title' => ['required', Rule::unique('yoflos')->where(function ($query) {
+            return $query->where('user_id', Auth::id());
+          }),],
+        ]);
+
+      $yoflo=Yoflo::where('user_id','=',Auth::id())->where('id','=',$id)->first();
+
+      if(!$yoflo)
+        return $this->sendError(['message'=>'No data']);
+
+      $yoflo->update(['title' => $request->title]);
+
+      $payload = ['id' => $id];
+      return $this->sendResponse($payload);
     }
 
     /**

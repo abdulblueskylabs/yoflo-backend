@@ -24,7 +24,7 @@
       $root_folders = Folder::where('user_id', $user->id)->where('parent_folder_id', null)->get();
       if ($root_folders->isEmpty()) {
         $error = ['message' => 'No folder found'];
-       return  $this->sendError($error);
+        return $this->sendError($error);
       }
 
       return $this->sendResponse($root_folders);
@@ -48,7 +48,7 @@
         ->where('user_id', Auth::id())
         ->where('name', $request->name)
         ->first();
-      if ($folder->isEmpty()) {
+      if (!$folder) {
 
         if (!$request->parent_folder_id) {
           $folder = Folder::create(
@@ -91,9 +91,9 @@
         ->where('name', $request->name)
         ->first();
 
-      if ($folder->isEmpty()) {
+      if (!$folder) {
 
-        Folder::findorfail($id)->update(['name'=> $request->name]);
+        Folder::findorfail($id)->update(['name' => $request->name]);
 
         $payload = ['id' => $id];
         return $this->sendResponse($payload);

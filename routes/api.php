@@ -63,5 +63,6 @@
     Route::get('yoflo', [YofloController::class, 'index']);
     Route::get('yoflo/{folder_id}', [YofloController::class, 'show']);
     Route::post('yoflo', [YofloController::class, 'store']);
+    Route::put('yoflo/{folder_id}', [YofloController::class, 'update']);
 
   });
