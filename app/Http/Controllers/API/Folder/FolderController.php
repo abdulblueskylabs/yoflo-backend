@@ -17,18 +17,17 @@
      * Display a listing of the resource.
      * @return \Illuminate\Http\Response
      */
-    public function index ()
+    public function index ($id)
     {
       $user = Auth::user();
 
       $root_folders = Folder::where('user_id', $user->id)->where('parent_folder_id', null)->get();
-      if (!$root_folders) {
+      if ($root_folders->isEmpty()) {
         $error = ['message' => 'No folder found'];
-        $this->sendError($error);
+       return  $this->sendError($error);
       }
 
-      $payload = $root_folders;
-      return $this->sendResponse($payload);
+      return $this->sendResponse($root_folders);
     }
 
     /**
@@ -43,8 +42,13 @@
         [
           'name' => 'required',
         ]);
-      $folder=Folder::where('parent_folder_id',$request->parent_folder_id )->where('user_id',Auth::id())->first();
-      if(!$folder) {
+
+      // Check whether folder exists on same level
+      $folder = Folder::where('parent_folder_id', $request->parent_folder_id)
+        ->where('user_id', Auth::id())
+        ->where('name', $request->name)
+        ->first();
+      if ($folder->isEmpty()) {
 
         if (!$request->parent_folder_id) {
           $folder = Folder::create(
@@ -65,7 +69,7 @@
         $payload = ['id' => $folder->id];
         return $this->sendResponse($payload);
       }
-      return $this->sendError(['message'=>'folder Already exists']);
+      return $this->sendError(['message' => 'Folder already exists']);
     }
 
     /**
@@ -76,19 +80,25 @@
      */
     public function update (Request $request, $id)
     {
-      $user = Auth::user();
+      $request->validate(
+        [
+          'name' => 'required',
+        ]);
 
+      // Check whether folder exists on same level
+      $folder = Folder::where('parent_folder_id', $request->parent_folder_id)
+        ->where('user_id', Auth::id())
+        ->where('name', $request->name)
+        ->first();
 
-        $folder = Folder::create(
-          [
-            'user_id'          => $user->id,
-            'name'             => $request->name ?: 'default',
-            'parent_folder_id' => $request->parent_folder_id,
-          ]);
+      if ($folder->isEmpty()) {
 
+        Folder::findorfail($id)->update(['name'=> $request->name]);
 
-      $payload = ['id' => $folder->id];
-      return $this->sendResponse($payload);
+        $payload = ['id' => $id];
+        return $this->sendResponse($payload);
+      }
+      return $this->sendError(['message' => 'Folder already exists']);
     }
 
     /**

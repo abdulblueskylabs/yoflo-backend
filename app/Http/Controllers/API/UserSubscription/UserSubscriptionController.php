@@ -25,7 +25,7 @@
     {
       $user = Auth::user();
 
-      if (!$user)
+      if ($user->isEmpty())
         return $this->sendError(['message' => 'No data available']);
       return $this->sendResponse(new UserSubscriptionCollection($user->subscriptions));
     }
@@ -40,7 +40,7 @@
     {
       $user = Auth::user();
 
-      if (!$user || !$id)
+      if (!$id)
         return $this->sendError(['message' => 'No data available']);
       else {
         // Find existing subscription

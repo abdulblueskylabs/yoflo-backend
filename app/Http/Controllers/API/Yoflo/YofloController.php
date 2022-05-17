@@ -20,16 +20,13 @@
      */
     public function index ()
     {
-      //
-    }
+      $yoflos = Yoflo::where('user_id', Auth::id())->get();
+      if (!$yoflos) {
+        $error = ['message' => 'No data'];
+       return  $this->sendError($error);
+      }
+      return $this->sendResponse($yoflos);
 
-    /**
-     * Show the form for creating a new resource.
-     * @return \Illuminate\Http\Response
-     */
-    public function create ()
-    {
-      //
     }
 
     /**
@@ -63,13 +60,20 @@
     }
 
     /**
-     * Display the specified resource.
-     * @param int $id
+     * Provide the specified resource.
+     * @param int $folder_id
      * @return \Illuminate\Http\Response
      */
-    public function show ($id)
+    public function show ($folder_id)
     {
-      //
+      $yoflo = Yoflo::where('user_id', Auth::id())->where('folder_id', $folder_id)->get();
+
+      if ($yoflo->isEmpty()) {
+        $error = ['message' => 'No data'];
+        return $this->sendError($error);
+      }
+      return $this->sendResponse($yoflo);
+
     }
 
     /**

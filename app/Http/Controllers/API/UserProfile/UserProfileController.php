@@ -21,52 +21,13 @@
       $user = Auth::user();
       $current_subscription = $user->activeSubscriptions()->first();
 
-      if (!$user || !$current_subscription)
+      if ($current_subscription->isEmpty())
         return $this->sendError(['message' => 'No data available']);
 
       $response = ['firstName' => $user->first_name, 'lastName' => $user->last_name, 'email' => $user->email, 'emailVerified' => $user->email_verified_at, 'subscriptionType' => $current_subscription->name];
       return $this->sendResponse($response);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return \Illuminate\Http\Response
-     */
-    public function create ()
-    {
-      //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store (Request $request)
-    {
-      //
-    }
-
-    /**
-     * Display the specified resource.
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show ($id)
-    {
-      //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit ($id)
-    {
-      //
-
-    }
 
     /**
      * Update the specified resource in storage.
@@ -93,13 +54,4 @@
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy ($id)
-    {
-      //
-    }
   }

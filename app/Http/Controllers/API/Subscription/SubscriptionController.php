@@ -23,8 +23,8 @@
       $subscriptions = Subscription::where('is_active', 1)->get();
 
       // NO data available
-      if (!$subscriptions)
-        return $this->sendError('No data', 404);
+      if ($subscriptions->isEmpty())
+        return $this->sendError(['message'=>'No data'], 404);
       else {
 
         // Return formatted data
