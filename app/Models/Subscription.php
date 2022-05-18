@@ -22,8 +22,17 @@
       'is_active',
     ];
 
+    /**
+     * Get the users that owns the subscriptions.
+     */
     public function users ()
     {
-      return $this->belongsToMany(User::class, 'user_subscription', 'subscription_id', 'user_id')->withPivot('start_date', 'end_date', 'is_active')->withTimestamps();
+      return $this->belongsToMany(
+        User::class,
+        'user_subscription',
+        'subscription_id',
+        'user_id')
+        ->withPivot('start_date', 'end_date', 'is_active')
+        ->withTimestamps();
     }
   }

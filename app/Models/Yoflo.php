@@ -20,7 +20,7 @@ class Yoflo extends Model
   ];
 
   /**
-   * Get the yoflos that owns the folder.
+   * Get the folder that owns the yoflo.
    */
   public function folder()
   {
@@ -29,12 +29,18 @@ class Yoflo extends Model
 
 
   /**
-   * Get the yoflos that owns the user.
+   * Get the users that owns the yoflo.
    */
   public function user()
   {
     return $this->belongsTo(User::class);
   }
 
-
+  /**
+   * Get the nodes for the  yoflo.
+   */
+  public function nodes ()
+  {
+    return $this->hasMany(Node::class);
+  }
 }

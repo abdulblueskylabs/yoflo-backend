@@ -31,13 +31,19 @@
   }
 
     /**
-     * Get the folder that owns the user.
+     * Get the users that owns the folder.
      */
     public function user()
     {
       return $this->belongsTo(User::class);
     }
-
+    /**
+     * Get the yoflos for the  folder.
+     */
+    public function yoflos ()
+    {
+      return $this->hasMany(Yoflo::class);
+    }
 
 }
 

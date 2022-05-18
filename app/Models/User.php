@@ -75,4 +75,12 @@
     {
       return $this->hasMany(Yoflo::class);
     }
+
+    /**
+     * Get the nodes for the  user.
+     */
+    public function nodes ()
+    {
+      return $this->hasMany(Node::class);
+    }
   }

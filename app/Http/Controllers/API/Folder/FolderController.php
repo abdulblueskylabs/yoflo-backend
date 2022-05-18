@@ -85,6 +85,11 @@
           'name' => 'required',
         ]);
 
+      // Check Whether folder id belongs to user
+      $folder_belongs=Folder::where('id', $id)->where('user_id', Auth::id())->first();
+      if(!$folder_belongs)
+        return $this->sendError(['message'=>'No data']);
+
       // Check whether folder exists on same level
       $folder = Folder::where('parent_folder_id', $request->parent_folder_id)
         ->where('user_id', Auth::id())
