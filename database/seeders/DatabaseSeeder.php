@@ -2,6 +2,7 @@
 
   namespace Database\Seeders;
 
+  use App\Models\NodeType;
   use Illuminate\Database\Console\Seeds\WithoutModelEvents;
   use Illuminate\Database\Seeder;
 
@@ -14,8 +15,9 @@
     public function run()
     {
       // \App\Models\User::factory(10)->create();
-      $this->call(RolesTableSeeder::class);
-      $this->call(SubscriptionTableSeeder::class);
-      $this->call(AdminSeeder::class);
+     // $this->call(RolesTableSeeder::class);
+      //$this->call(SubscriptionTableSeeder::class);
+      //$this->call(AdminSeeder::class);
+      $this->call(NodeTypeSeeder::class);
     }
   }

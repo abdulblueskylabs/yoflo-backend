@@ -18,7 +18,7 @@
         $table->unsignedBigInteger('node_type_id');
         $table->string('title');
         $table->string('description')->nullable();
-        $table->string('unity_coordinates');
+        $table->string('coordinates');
         $table->timestamps();
       });
     }
