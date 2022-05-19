@@ -17,7 +17,6 @@
       'title',
       'description',
       'coordinates',
-      'max_storage_quantity',
       'yoflo_id',
       'user_id',
       'node_type_id',

@@ -19,6 +19,14 @@ return new class extends Migration
             $table->string('description');
             $table->unsignedBigInteger('folder_id');
             $table->unsignedBigInteger('user_id');
+          $table->foreign('user_id')
+            ->unsigned()
+            ->references('id')
+            ->on('users');
+          $table->foreign('folder_id')
+            ->unsigned()
+            ->references('id')
+            ->on('folders');
             $table->timestamps();
         });
     }

@@ -11,7 +11,7 @@
      */
     public function up ()
     {
-      Schema::create('libraries', function (Blueprint $table) {
+      Schema::create('files', function (Blueprint $table) {
         $table->id();
         $table->string('type');
         $table->string('size');
@@ -20,8 +20,16 @@
         $table->string('extension');
         $table->string('name');
         $table->string('reference');
-        $table->unsignedBigInteger('node_id');
         $table->unsignedBigInteger('user_id');
+        $table->unsignedBigInteger('node_id');
+        $table->foreign('user_id')
+          ->unsigned()
+          ->references('id')
+          ->on('users');
+        $table->foreign('node_id')
+          ->unsigned()
+          ->references('id')
+          ->on('nodes');
         $table->timestamps();
       });
     }
@@ -32,6 +40,6 @@
      */
     public function down ()
     {
-      Schema::dropIfExists('libraries');
+      Schema::dropIfExists('files');
     }
   };
