@@ -9,14 +9,15 @@ use Illuminate\Http\Request;
 class LibraryController extends Controller
 {
   use ResponseTrait;
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+
     }
 
 
@@ -29,6 +30,12 @@ class LibraryController extends Controller
     public function store(Request $request)
     {
 
+      $request->validate(
+        [
+          'node_id'=>'required',
+
+
+        ]);
 
     }
 

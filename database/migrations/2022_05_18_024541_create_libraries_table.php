@@ -21,6 +21,7 @@
         $table->string('name');
         $table->string('reference');
         $table->unsignedBigInteger('node_id');
+        $table->unsignedBigInteger('user_id');
         $table->timestamps();
       });
     }

@@ -83,4 +83,13 @@
     {
       return $this->hasMany(Node::class);
     }
+
+    /**
+     * Get the libraries for the  user.
+     */
+    public function libraries ()
+    {
+      return $this->hasMany(Library::class);
+    }
+
   }

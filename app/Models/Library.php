@@ -8,4 +8,26 @@ use Illuminate\Database\Eloquent\Model;
 class Library extends Model
 {
     use HasFactory;
+
+  /**
+   * The attributes that are mass assignable.
+   * @var array<int, string>
+   */
+  protected $fillable = [
+    'type',
+    'size',
+    'url',
+    'extension',
+    'name',
+    'reference',
+    'node_id',
+    'user_id'
+  ];
+  /**
+   * Get the user that owns the library.
+   */
+  public function user()
+  {
+    return $this->belongsTo(User::class);
+  }
 }

@@ -10,6 +10,7 @@
   use App\Http\Controllers\Auth\VerificationController;
   use \App\Http\Controllers\API\Folder\FolderController;
   use \App\Http\Controllers\API\Yoflo\YofloController;
+  use \App\Http\Controllers\API\Library\LibraryController;
   use Illuminate\Support\Facades\Route;
 
   /*
@@ -65,4 +66,7 @@
     Route::post('yoflo', [YofloController::class, 'store']);
     Route::put('yoflo/{folder_id}', [YofloController::class, 'update']);
 
+    // Library Routes (files connected to the node)
+    Route::get('library',[LibraryController::class,'index']);
+    Route::post('library',[LibraryController::class,'store']);
   });
