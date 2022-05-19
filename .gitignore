@@ -14,3 +14,4 @@ yarn-error.log
 /.vscode
 artisan
 composer.lock
+*.lock

@@ -16,15 +16,15 @@
     {
       //
 
-      Role::create(
+      NodeType::create(
         [
           'name' => 'active',
         ]);
-      Role::create(
+      NodeType::create(
         [
           'name' => 'link',
         ]);
-      Role::create(
+      NodeType::create(
         [
           'name' => 'edge',
         ]);
