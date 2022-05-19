@@ -18,7 +18,7 @@
 
       Role::create(
         [
-          'name' => 'active-node',
+          'name' => 'active',
         ]);
       Role::create(
         [

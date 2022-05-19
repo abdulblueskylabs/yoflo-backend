@@ -4,6 +4,7 @@
 
   use App\Http\Controllers\Controller;
   use App\Models\Node;
+  use App\Models\NodeType;
   use Illuminate\Http\Request;
   use Illuminate\Support\Facades\Auth;
 
@@ -29,20 +30,23 @@
       if ($request->hasFile('fileName')) {
         $request->validate(
           [
-            'yoflo_id'          => 'required',
-            'title'             => 'required',
-            'unity_coordinates' => 'required',
+            'yoflo_id'    => 'required',
+            'title'       => 'required',
+            'coordinates' => 'required',
           ]);
 
-        Node::create(
+        $nodetye = NodeType::where('name', 'active')->first();
+        $node = Node::create(
           [
-            'title'=>$request->title,
-            'description'=>$request->description,
-            'user_id'=>Auth::id(),
-            'unity_coordinates'=>$request->unity_coordinates,
-
+            'title'        => $request->title,
+            'description'  => $request->description,
+            'user_id'      => Auth::id(),
+            'coordinates'  => $request->coordinates,
+            'node_type_id' => $nodetye->id,
+            'yoflo_id'     => $request->yoflo_id,
           ]);
       }
+
     }
 
     /**
