@@ -11,6 +11,7 @@
   use \App\Http\Controllers\API\Folder\FolderController;
   use \App\Http\Controllers\API\Yoflo\YofloController;
   use \App\Http\Controllers\API\Library\LibraryController;
+  use \App\Http\Controllers\API\File\FileController;
   use Illuminate\Support\Facades\Route;
 
   /*
@@ -68,5 +69,7 @@
 
     // Library Routes (files connected to the node)
     Route::get('library',[LibraryController::class,'index']);
-    Route::post('library',[LibraryController::class,'store']);
+
+    // File Routes
+    Route::post('file',[FileController::class,'store']);
   });
