@@ -1,24 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\API\Library;
+namespace App\Http\Controllers\API\File;
 
 use App\Http\Controllers\Controller;
-use App\Http\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 
-class LibraryController extends Controller
+class FileController extends Controller
 {
-  use ResponseTrait;
-
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-
+        //
     }
+
 
 
     /**
@@ -29,12 +27,39 @@ class LibraryController extends Controller
      */
     public function store(Request $request)
     {
+      $request->validate(
+        [
+          'node_id'=>'required',
+          'file' => 'required',
+          'file.*' =>'mimes:png,jpg,jpeg,mp4,ogx,oga,ogv,ogg,webm,qt| max: 524288',
+        ]);
+      foreach ($request->file('files') as $key => $file)
+      {
 
-
-
+      }
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
 
     /**
      * Update the specified resource in storage.
