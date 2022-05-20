@@ -81,7 +81,18 @@ services:
         volumes:
             - '/dev/shm:/dev/shm'
         networks:
-            - sail
+          - sail
+    phpmyadmin:
+      image: 'phpmyadmin/phpmyadmin'
+      container_name: pma
+      environment:
+        PMA_HOST: mysql
+        PMA_ARBITRARY: 1
+      restart: always
+      ports:
+        - 8080:80
+      networks:
+        - sail
 networks:
     sail:
         driver: bridge
