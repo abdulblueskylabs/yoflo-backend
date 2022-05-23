@@ -51,7 +51,6 @@
     Route::get('test', function()
     {
       $user= Auth::user()->activeSubscriptions()->first();
-return $user;
     });
 
     // Auth routes

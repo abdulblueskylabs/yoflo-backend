@@ -43,7 +43,7 @@
 
         File::create(
           [
-            'type'      =>$file->getMimeType(),
+            'type'      =>strtok($file->getMimeType(), '/'),
             'node_id'   => $request->node_id,
             'name'      => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
             'path'      => $path,
@@ -55,7 +55,7 @@
           ]);
 
 
-      return $this->sendResponse(['message' => 'data saved ']);
+      return $this->sendResponse(['fileUrl' => $disk->url($path)]);
     }
 
     /**
