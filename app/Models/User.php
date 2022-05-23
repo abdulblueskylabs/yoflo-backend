@@ -87,9 +87,10 @@
     /**
      * Get the libraries for the  user.
      */
-    public function libraries ()
+    public function Files ()
     {
-      return $this->hasMany(Library::class);
+      return $this->hasMany(File::class);
     }
+
 
   }

@@ -30,7 +30,16 @@ class LibraryController extends Controller
     public function store(Request $request)
     {
 
+      $request->validate(
+        [
+          'node_id'=>'required',
+          'file' => 'required',
+          'file.*' =>'mimes:png,jpg,jpeg,mp4,ogx,oga,ogv,ogg,webm,qt| max: 524288',
+        ]);
+      foreach ($request->file('files') as $key => $file)
+        {
 
+        }
 
     }
 

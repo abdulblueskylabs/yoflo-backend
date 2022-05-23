@@ -14,7 +14,7 @@
       Schema::create('files', function (Blueprint $table) {
         $table->id();
         $table->string('type');
-        $table->string('size');
+        $table->decimal('size');
         $table->string('path');
         $table->string('url');
         $table->string('extension');

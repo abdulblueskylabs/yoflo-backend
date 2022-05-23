@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('yoflos', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->unsignedBigInteger('folder_id');
             $table->unsignedBigInteger('user_id');
           $table->foreign('user_id')

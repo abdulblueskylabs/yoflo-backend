@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('max_node_quantity');
             $table->integer('max_share_quantity');
-            $table->string('max_storage_quantity');
+            $table->integer('max_storage_quantity');
             $table->decimal('cost');
             $table->tinyInteger('is_active');
             $table->timestamps();

@@ -8,7 +8,7 @@
   use Illuminate\Support\Facades\Password;
   use Illuminate\Support\Facades\Validator;
 
-  class forgotPasswordController extends Controller
+  class ForgotPasswordController extends Controller
   {
     use ResponseTrait;
 

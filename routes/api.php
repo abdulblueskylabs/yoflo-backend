@@ -12,6 +12,8 @@
   use \App\Http\Controllers\API\Yoflo\YofloController;
   use \App\Http\Controllers\API\Library\LibraryController;
   use \App\Http\Controllers\API\File\FileController;
+  use \App\Http\Controllers\API\Node\NodeController;
+  use Illuminate\Support\Facades\Auth;
   use Illuminate\Support\Facades\Route;
 
   /*
@@ -29,6 +31,7 @@
 
   Route::prefix('user')->group(function () {
 
+
     Route::post('sign-up', [RegistrationController::class, 'register']);
     Route::post('login', [LoginController::class, 'login']);
     Route::post('request-password', [forgotPasswordController::class, 'forgotPassword']);
@@ -41,7 +44,15 @@
   Route::get('email/verify/{id}', [VerificationController::class, 'verify'])->name('verification.verify');
   Route::get('email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
 
+
+  /* Protected Routes*/
   Route::group(['prefix' => 'user', 'middleware' => ['auth:sanctum', 'role:user', 'is_active']], function () {
+
+    Route::get('test', function()
+    {
+      $user= Auth::user()->activeSubscriptions()->first();
+return $user;
+    });
 
     // Auth routes
     Route::post('logout', [LoginController::class, 'logout']);
@@ -67,9 +78,18 @@
     Route::post('yoflo', [YofloController::class, 'store']);
     Route::put('yoflo/{folder_id}', [YofloController::class, 'update']);
 
+    // Node routes
+    Route::get('node', [NodeController::class, 'index']);
+    Route::get('node/{id}', [NodeController::class, 'show']);
+    Route::post('node', [NodeController::class, 'store']);
+    Route::put('node/{id}', [NodeController::class, 'update']);
+
     // Library Routes (files connected to the node)
-    Route::get('library',[LibraryController::class,'index']);
+    Route::get('library', [LibraryController::class, 'index']);
 
     // File Routes
-    Route::post('file',[FileController::class,'store']);
+    Route::post('file', [FileController::class, 'store'])->middleware('storage_check');
+    Route::put('file/{id}', [FileController::class, 'update']);
+    Route::delete('file/{id}', [FileController::class, 'destroy']);
+
   });

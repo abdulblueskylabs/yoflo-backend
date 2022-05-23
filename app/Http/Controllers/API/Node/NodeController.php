@@ -3,6 +3,7 @@
   namespace App\Http\Controllers\API\Node;
 
   use App\Http\Controllers\Controller;
+  use App\Http\Traits\ResponseTrait;
   use App\Models\Node;
   use App\Models\NodeType;
   use Illuminate\Http\Request;
@@ -10,6 +11,8 @@
 
   class NodeController extends Controller
   {
+    use ResponseTrait;
+
     /**
      * Display a listing of the resource.
      * @return \Illuminate\Http\Response
@@ -27,7 +30,7 @@
     public function store (Request $request)
     {
       // Active node
-      if ($request->hasFile('fileName')) {
+      if (!$request->hasFile('files')) {
         $request->validate(
           [
             'yoflo_id'    => 'required',
@@ -45,6 +48,8 @@
             'node_type_id' => $nodetye->id,
             'yoflo_id'     => $request->yoflo_id,
           ]);
+        return $this->sendResponse($node);
+
       }
 
     }

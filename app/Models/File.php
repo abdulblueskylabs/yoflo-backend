@@ -19,7 +19,17 @@ class File extends Model
     'extension',
     'name',
     'reference',
+    'path',
     'node_id',
     'user_id'
   ];
+
+  /**
+   * Get the user that owns the file.
+   */
+  public function user ()
+  {
+    return $this->belongsTo(User::class);
+  }
+
 }
