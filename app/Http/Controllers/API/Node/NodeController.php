@@ -3,7 +3,10 @@
   namespace App\Http\Controllers\API\Node;
 
   use App\Http\Controllers\Controller;
+  use App\Http\Resources\LibraryCollection;
+  use App\Http\Resources\NodeResource;
   use App\Http\Traits\ResponseTrait;
+  use App\Models\File;
   use App\Models\Node;
   use App\Models\NodeType;
   use Illuminate\Http\Request;
@@ -17,9 +20,20 @@
      * Display a listing of the resource.
      * @return \Illuminate\Http\Response
      */
-    public function index ()
+    public function index (Request$request)
     {
-      //
+      $request->validate(
+        [
+          'node_id' => 'required',
+        ]);
+
+      $user = Auth::user();
+      $files = File::whereBelongsTo($user)->where('node_id', $request->node_id)->get();
+      $node= Node::findorfail($request->node_id);
+      if ($files->isEmpty()) {
+        $this->sendError(['message' => 'No file Found']);
+      }
+      return $this->sendResponse(new NodeResource($node));
     }
 
     /**
