@@ -4,6 +4,7 @@
 
   use App\Http\Controllers\Controller;
   use App\Http\Resources\LibraryCollection;
+  use App\Http\Resources\LibraryResource;
   use App\Http\Traits\ResponseTrait;
   use App\Models\File;
   use Illuminate\Http\Request;
@@ -14,18 +15,14 @@
     use ResponseTrait;
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the files associated with users.
      * @return \Illuminate\Http\Response
      */
     public function index (Request $request)
     {
-      $request->validate(
-        [
-          'node_id' => 'required',
-        ]);
 
       $user = Auth::user();
-      $files = File::whereBelongsTo($user)->where('node_id', $request->node_id)->paginate();
+      $files = File::whereBelongsTo($user)->get();
       if ($files->isEmpty()) {
         $this->sendError(['message' => 'No file Found']);
       }
@@ -34,33 +31,19 @@
     }
 
     /**
-     * Store a newly created resource in storage.
-     * @param \Illuminate\Http\Request $request
+     * Display a specfic file record associated with users.
      * @return \Illuminate\Http\Response
      */
-    public function store (Request $request)
+    public function show ($id)
     {
+
+      $user = Auth::user();
+      $file = File::where('id', $id)->where('user_id', $user->id)->firstorfail();
+      if (!$file) {
+        $this->sendError(['message' => 'No file Found']);
+      }
+      return $this->sendResponse(new LibraryResource($file));
 
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update (Request $request, $id)
-    {
-      //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy ($id)
-    {
-      //
-    }
   }

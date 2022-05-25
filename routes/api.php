@@ -85,6 +85,7 @@
 
     // Library Routes (files connected to the node)
     Route::get('library', [LibraryController::class, 'index']);
+    Route::get('library/{id}', [LibraryController::class, 'show']);
 
     // File Routes
     Route::post('file', [FileController::class, 'store'])->middleware('storage_check');
