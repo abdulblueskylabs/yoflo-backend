@@ -15,3 +15,4 @@ yarn-error.log
 artisan
 composer.lock
 *.lock
+file.touch

@@ -43,4 +43,11 @@ class Yoflo extends Model
   {
     return $this->hasMany(Node::class);
   }
+  /**
+   * Get the shares for the  yoflo.
+   */
+  public function shares ()
+  {
+    return $this->hasMany(Share::class);
+  }
 }
