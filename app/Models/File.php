@@ -31,5 +31,11 @@ class File extends Model
   {
     return $this->belongsTo(User::class);
   }
-
+  /**
+   * Get the node that owns the file.
+   */
+  public function node ()
+  {
+    return $this->belongsTo(Node::class);
+  }
 }

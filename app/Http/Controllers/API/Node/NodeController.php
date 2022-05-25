@@ -4,6 +4,7 @@
 
   use App\Http\Controllers\Controller;
   use App\Http\Resources\LibraryCollection;
+  use App\Http\Resources\NodeCollection;
   use App\Http\Resources\NodeResource;
   use App\Http\Traits\ResponseTrait;
   use App\Models\File;
@@ -17,23 +18,16 @@
     use ResponseTrait;
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the nodes assicated with users.
      * @return \Illuminate\Http\Response
      */
-    public function index (Request$request)
+    public function index ()
     {
-      $request->validate(
-        [
-          'node_id' => 'required',
-        ]);
-
-      $user = Auth::user();
-      $files = File::whereBelongsTo($user)->where('node_id', $request->node_id)->get();
-      $node= Node::findorfail($request->node_id);
-      if ($files->isEmpty()) {
+      $node=Node::where('user_id',Auth::id())->with('files')->get();
+      if (!$node) {
         $this->sendError(['message' => 'No file Found']);
       }
-      return $this->sendResponse(new NodeResource($node));
+      return $this->sendResponse(new NodeCollection($node));
     }
 
     /**

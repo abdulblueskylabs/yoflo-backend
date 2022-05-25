@@ -39,19 +39,18 @@
     }
 
     /**
-     * Get the NodeType associated with the Node.
+     * Get the Nodetypes that owns the Node.
      */
-    public function nodetype ()
+    public function nodetype()
     {
-      return $this->hasOne(NodeType::class);
+      return $this->belongsTo(NodeType::class);
     }
-
     /**
      * Get the library for the Node.
      */
-    public function libraries ()
+    public function files ()
     {
-      return $this->hasMany(Library::class);
+      return $this->hasMany(File::class);
     }
 
   }

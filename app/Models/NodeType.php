@@ -16,11 +16,13 @@ class NodeType extends Model
     'name',
   ];
 
+
   /**
-   * Get the Node that owns the Nodes type.
+   * Get the Node associated with the Nodetype.
    */
-  public function node()
+  public function node ()
   {
-    return $this->belongsTo(Node::class);
+    return $this->hasOne(Node::class);
   }
+
 }
